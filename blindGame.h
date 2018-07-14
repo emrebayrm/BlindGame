@@ -22,9 +22,9 @@ typedef struct {
     int id;
 } BlindGame;
 
-int isValidDir(Point *p, int dir, char **map);
+int isValidDir(Point *p, int dir, char **map, int mapRow, int mapCol);
 
-void moveChar(Player *player, int dir, char **map);
+void movePlayer(Player *player, int dir, char **map);
 
 
 
