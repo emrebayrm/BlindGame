@@ -31,10 +31,10 @@ void moveObject(BlindGame *game, int dir, void *movable, void (*moveOp) (void*))
 void movePlayer(BlindGame *game, int dir, Player *player);
 void moveGoal(BlindGame *game, int dir, Goal *goal);
 
-//returns -1 if the point is out of bounds, 0 otherwise
+//returns 0 if the point is out of bounds, 1 otherwise
 int checkBounds(BlindGame *game, Point p);
 
-//returns -1 if the point is valid, 0 otherwise
+//returns 0 if the point is invalid, 1 otherwise
 int isValidPoint(BlindGame *game, Point p);
 
 //generates the map
@@ -45,6 +45,9 @@ Point* getRandomPoint(BlindGame *game);
 
 //places the goal
 void placeGoal(BlindGame *game);
+
+//returns 0 if the game is not finished, playerID otherwise
+int isFinished(BlindGame *game);
 
 
 
