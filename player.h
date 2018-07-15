@@ -10,9 +10,12 @@
 #define player_h
 
 #include <stdio.h>
+#include "point.h"
 
 typedef struct {
-    
+    int playerID;
+    Point *location;
+    char name[10];
 } Player;
 
 #endif /* player_h */

@@ -10,5 +10,10 @@
 #define goal_h
 
 #include <stdio.h>
+#include "point.h"
+
+typedef struct {
+    Point *location;
+} Goal;
 
 #endif /* goal_h */

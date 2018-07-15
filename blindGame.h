@@ -21,9 +21,9 @@ typedef struct {
     int maxPlayer;
     int currPlayers;
     char blocks[5];
-    Point *goalPoint;
+    Goal *goal;
     Player *players;
-    int id;
+    int gameID;
 } BlindGame;
 
 void moveObject(BlindGame *game, int dir, void *movable, void (*moveOp) (void*));
