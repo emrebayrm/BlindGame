@@ -11,4 +11,19 @@
 
 #include <stdio.h>
 
+class Point {
+private:
+    int x;
+    int y;
+public:
+    Point(int x, int y);
+    int getX();
+    int getY();
+    void incX();
+    void incY();
+    void decX();
+    void decY();
+    int distance(Point *p);
+};
+
 #endif /* point_hpp */
