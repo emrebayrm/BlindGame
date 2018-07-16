@@ -59,7 +59,7 @@ Game *GameServerEngine::createGame() {
     char *name = new char[10];
 
     sprintf(name,"game_%d",uid);
-    game = new Game(uid,0,name);
+    //game = new Game(uid,0,name);
 
     gamelist.push_back(game);
 
@@ -68,5 +68,3 @@ Game *GameServerEngine::createGame() {
 bool GameServerEngine::observeGame(int gameid) {
     return false;
 }
-
-BlindGame::BlindGame(int id, int a, char *n) : Game(id, a, n) {}

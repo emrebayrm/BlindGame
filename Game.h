@@ -7,68 +7,35 @@
 
 #include <vector>
 #include <string>
+#include "player.hpp"
 
 using namespace std;
 
 class Game{
 private:
-
-    char *Name;
-    int id;
-    vector<char*> player;
     int uid_p = 0;
-
+    vector<Player*> players;
 public:
-    Game(int id,int a,char *n){
-        this->id = id;
-        this->Name = n;
-    }
+    virtual string getName() = 0;
+    virtual int getId() = 0;
+    virtual int getMaxPlayer() = 0;
+    vector<Player*> getPlayers() {
+        return players;
+    };
 
-    char *getName(){
-        return Name;
-    }
-    int getId(){
-        return id;
-    }
-    int getMaxPlayer(){
-        return 5;
-    }
-    vector<char*> getPlayers(){
-        return player;
-    }
-    int getMapRow(){
-        return 15;
-    }
-    int getMapCol(){
-        return 15;
-    }
+    virtual int getMapRow() = 0;
+    virtual int getMapCol() = 0;
 
-    int join(char * arr){
-        if(player.size() < getMaxPlayer()) {
+    virtual string toString() = 0;
 
-            player.push_back(arr);
-            return uid_p++;
-        }
-        return -1;
-    }
-    string toString(){
-        string str;
-        str.append("Name : ");
-        str.append(getName());
-        str.append(" Id : " );
-        str.append(to_string(getId()));
-        str.append("    ");
-        str.append(to_string(getMaxPlayer()));
-        str.append("/");
-        str.append(to_string(getPlayers().size()));
-        return str;
-    }
+    virtual int join(string arr) = 0;
+
 };
-
+/*
 class BlindGame : public Game{
 public:
     BlindGame(int id, int a, char *n);
 };
-
+*/
 
 #endif //BLINDGAME_GAME_H

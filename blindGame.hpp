@@ -16,10 +16,11 @@
 #include <set>
 
 #include "player.hpp"
+#include "Game.h"
 
 using namespace std;
 
-class BlindGame {
+class BlindGame : public Game {
 private:
     char **map;
     int mapRow;
@@ -27,7 +28,6 @@ private:
     int maxPlayer;
     int currPlayers;
     Point *coinLocation;
-    vector<Player*> players;
     int id;
     string name;
     set<int> idSet;
@@ -51,7 +51,6 @@ public:
     int getMaxPlayer();
     int getCurrPlayers();
     Point* getCoinLocation();
-    vector<Player*> getPlayers();
     int getId();
     string getName();
     //setters
