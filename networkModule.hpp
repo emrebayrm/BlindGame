@@ -34,9 +34,13 @@ public:
 };
 
 class ClientNetworkModule : public NetworkModule{
+private:
+    int fd=-1;
+public:
     void init(int port);
     int sendData(void *buf, int size);
     int recvData(void *buf, int size);
+    void setFd(int _fd){ fd=_fd;}
 };
 
 
