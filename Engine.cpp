@@ -14,7 +14,7 @@ bool GameServerEngine::startServer() {
 
         if(command.commandType == CREATE){
             cout << "Create" <<endl;
-            createGame(0, std::__cxx11::string());
+            createGame(5,"Emre's game");
         }
         else if(command.commandType == JOIN){
             cout << "Join" <<endl;
