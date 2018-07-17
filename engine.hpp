@@ -30,6 +30,7 @@ private:
     vector<Game *> gamelist;
     int uid = 0;
     const static int portNumber = 1550;
+
 public:
     int generateUniqueId(){
         return ++uid;
@@ -54,15 +55,10 @@ public:
 
     bool startServer();
 
-    virtual Game *gameObjCreator(int id, int maxPlayer, string gameName) = 0;
-
 };
 
 class BlindGameServerEngine : public GameServerEngine {
 public:
-    Game *gameObjCreator(int id, int maxPlayer, string gameName) {
-        return new BlindGame(id,maxPlayer,gameName);
-    }
     GameCommand_t * doHandshake();
     Game *createGame(GameCommand_t *command);
 };

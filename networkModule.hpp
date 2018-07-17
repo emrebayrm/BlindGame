@@ -21,6 +21,7 @@ public:
 };
 
 class ServerNetworkModule : public NetworkModule{
+public:
     void init(int port);
     int send(void *buf, int size);
     int recv(void *buf, int size);
@@ -29,6 +30,7 @@ class ServerNetworkModule : public NetworkModule{
 };
 
 class ClientNetworkModule : public NetworkModule{
+public:
     void init(int port);
     int send(void *buf, int size);
     int recv(void *buf, int size);

@@ -22,6 +22,7 @@
 
 #include "player.hpp"
 #include "game.hpp"
+#include "point.hpp"
 
 using namespace std;
 

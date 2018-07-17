@@ -10,7 +10,7 @@
 bool GameServerEngine::startServer() {
     while (1) {
         GameCommand_t *command;
-        listGame();
+        ((ServerNetworkModule *) networkModule)->listen();
         command = doHandshake();
 
         if (command->command.commandType == CREATE) {
