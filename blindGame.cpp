@@ -15,16 +15,12 @@
 
 using namespace std;
 
-#define UP 0;
-#define RIGHT 1;
-#define DOWN 2;
-#define LEFT 3;
+#define UP 0
+#define RIGHT 1
+#define DOWN 2
+#define LEFT 3
 
-BlindGame::BlindGame(int id, int maxPlayer, string name):Game() {
-    this->maxPlayer = maxPlayer;
-    this->currPlayers = 0;
-    this->name = name;
-    this->id = id;
+BlindGame::BlindGame(int id, int maxPlayer, string name) : Game(id, maxPlayer, name) {
     this->mapRow = calculateMapRow(maxPlayer);
     this->mapCol = calculateMapCol(maxPlayer);
     this->coinLocation = NULL;
@@ -63,10 +59,10 @@ int BlindGame::findPlayerId() {
     int playerId = -1;
     for(int i = 0; i < maxPlayer; ++i) {
         set<int>::iterator it;
-        it = idSet.find(i);
-        if(it == idSet.end()) {
+        it = playerIdSet.find(i);
+        if(it == playerIdSet.end()) {
             playerId = i;
-            idSet.insert(i);
+            playerIdSet.insert(i);
             break;
         }
     }
@@ -98,25 +94,25 @@ bool* BlindGame::getCoinDirections() {
     //up
     Point p(coinLocation->getX() - 1, coinLocation->getY());
     if(isValidPointMovement(p))
-        dirs[0] = true;
+        dirs[UP] = true;
     
     //right
     p.setX(coinLocation->getX());
     p.setY(coinLocation->getY() + 1);
     if(isValidPointMovement(p))
-        dirs[1] = true;
+        dirs[RIGHT] = true;
     
     //down
     p.setX(coinLocation->getX() - 1);
     p.setY(coinLocation->getY());
     if(isValidPointMovement(p))
-        dirs[2] = true;
+        dirs[DOWN] = true;
     
     //left
     p.setX(coinLocation->getX());
     p.setY(coinLocation->getY() + 1);
     if(isValidPointMovement(p))
-        dirs[3] = true;
+        dirs[LEFT] = true;
     return dirs;
 }
 

@@ -30,12 +30,7 @@ private:
     char **map;
     int mapRow;
     int mapCol;
-    int maxPlayer;
-    int currPlayers;
     Point *coinLocation;
-    int id;
-    string name;
-    set<int> idSet;
     
     int calculateMapRow(int maxPlayer);
     int calculateMapCol(int maxPlayer);
