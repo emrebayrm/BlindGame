@@ -2,14 +2,15 @@
 // Created by patates on 7/17/18.
 //
 
-#include "blindGameServerEngine.h"
+#include "blindGameServerEngine.hpp"
+#include "packets.hpp"
 
 GameCommand_t * BlindGameServerEngine::doHandshake() {
     GameCommand_t *command = new GameCommand_t;
     int ret;
 
     listGames();// sending game lists here
-    ret = networkModule->recvData(&command, sizeof(command));
+    ret = networkModule->recvData(command, sizeof(command));
 
     if(ret != command->command.length){
         cout << "something wrong with received data";
@@ -18,6 +19,7 @@ GameCommand_t * BlindGameServerEngine::doHandshake() {
     return command;
 }
 
+//TODO: implement dummy game
 Game *BlindGameServerEngine::createGame(GameCommand_t *command) {
     Game *game;
     GameCommand_t *blindGameCommand;
@@ -35,5 +37,6 @@ Game *BlindGameServerEngine::createGame(GameCommand_t *command) {
 
     startGameIntoThread(game);
     insertNewGame(game);
+    //joinGame(game->getId(),command->name);
 
 }

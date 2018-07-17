@@ -7,7 +7,6 @@
 //
 
 #include "blindGamePlayer.hpp"
-#include "blindGame.cpp"
 
 BlindGamePlayer::BlindGamePlayer(int id, string name) : Player(id, name) {
     this->location = NULL;

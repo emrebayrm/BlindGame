@@ -4,7 +4,7 @@
 
 #include "engine.hpp"
 #include "packets.hpp"
-#include "blindGameServerEngine.h"
+#include "blindGameServerEngine.hpp"
 
 class TestNetworkModule : public ServerNetworkModule{
 public:
@@ -17,13 +17,15 @@ public:
         Command *cmd;
         cmd = static_cast<Command *>(buf);
         if(cmd->commandType == DATA){
-            cout << cmd->context;
+            cout << cmd->context << endl;
         }
         return 0;
     }
 
     int recvData(void *buf, int size) override {
-        buf = &command;
+        GameCommand_t *temp;
+        temp = static_cast<GameCommand_t *>(buf);
+        *temp = command;
         return 0;
     }
 
@@ -59,7 +61,7 @@ public:
 
 int main(){
     BlindGameServerEngine gameServerEngine;
-    TestNetworkModule *testNetworkModule = new TestNetworkModule();
-    gameServerEngine.setNetworkModule(testNetworkModule);
-    gameServerEngine.startServer(1);
+    //TestNetworkModule *testNetworkModule = new TestNetworkModule();
+    //gameServerEngine.setNetworkModule(testNetworkModule);
+    gameServerEngine.startServer();
 }

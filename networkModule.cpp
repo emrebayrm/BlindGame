@@ -107,7 +107,7 @@ void ClientNetworkModule::init(int port) {
 }
 
 int ClientNetworkModule::sendData(void *buf, int size) {
-    rif(fd<0){
+    if(fd<0){
 		printf("Send Error!");
     	return -1;
 	}

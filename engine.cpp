@@ -7,11 +7,13 @@
 #include "networkModule.hpp"
 #include "engine.hpp"
 #include "packets.hpp"
-
+//TODO: debug level
 bool GameServerEngine::startServer(int debug) {
     this->debug = debug;
     while (1) {
         GameCommand_t *command;
+        if(debug == 1)
+            listGames();
         ((ServerNetworkModule *) networkModule)->listenClient();
         command = doHandshake();
 
@@ -54,7 +56,9 @@ bool GameServerEngine::joinGame(int gameid, char *playerName) {
     for (int i = 0; i < gamelist.size(); ++i) {
         if (gamelist[i]->getId() == gameid) {
             memset(command,0,MAX_PAYLOAD);
+
             pid = gamelist[i]->join(playerName);
+
             memcpy(command->context,&pid, sizeof(pid));
             command->commandType = DATA;
             command->length = sizeof(Command) + sizeof(pid) ;

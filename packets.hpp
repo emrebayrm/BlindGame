@@ -29,6 +29,7 @@ struct Command{
     char context[0];
 };
 
+//TODO: all operations commad_t
 typedef struct {
     Command command;
     int maxPlayer;
