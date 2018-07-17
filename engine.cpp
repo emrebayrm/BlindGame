@@ -5,74 +5,96 @@
 #include "blindGame.hpp"
 #include "networkModule.hpp"
 #include "engine.hpp"
+#include "packets.hpp"
 
 bool GameServerEngine::startServer() {
-    while(1){
-        struct Command command;
-        listGame();
+    while (1) {
+        GameCommand_t *command;
+        ((ServerNetworkModule *) networkModule)->listen();
         command = doHandshake();
 
-        if(command.commandType == CREATE){
-            cout << "Create" <<endl;
-            createGame(5,"Emre's game");
-        }
-        else if(command.commandType == JOIN){
-            cout << "Join" <<endl;
-            joinGame(1,"emre");
-        }
-        else if(command.commandType == OBSERVE){
-            cout << "Observe" <<endl;
-            observeGame(0);
+        if (command->command.commandType == CREATE) {
+            cout << "Create" << endl;
+            createGame(command);
+        } else if (command->command.commandType == JOIN) {
+            cout << "Join" << endl;
+            joinGame(command->gameId,command->name);
+        } else if (command->command.commandType == OBSERVE) {
+            cout << "Observe" << endl;
+            observeGame(command->gameId);
         }
     }
     return true;
 }
 
 bool GameServerEngine::listGame() {
+    Command buffer;
+
     for (int i = 0; i < gamelist.size(); ++i) {
-        cout << gamelist[i]->toString() << endl;
+        buffer.commandType = DATA;
+        buffer.length = gamelist[i]->toString().size() + sizeof(buffer);
+        buffer.context = (void *)gamelist[i]->toString().c_str();
 
+        networkModule->send(&buffer, buffer.length);
     }
-
-}
-
-struct Command GameServerEngine::doHandshake() {
-    struct Command command;
-    int type;
-    cin >> type;
-    command.commandType = (command_type)type;
-    return command;
+    return true;
 }
 
 bool GameServerEngine::joinGame(int gameid, char *playerName) {
     int pid;
+    Command command;
     for (int i = 0; i < gamelist.size(); ++i) {
-        if(gamelist[i]->getId() == gameid){
-
+        if (gamelist[i]->getId() == gameid) {
             pid = gamelist[i]->join(playerName);
-            // networkModule.send();
+            command.context = &pid;
+            command.commandType = DATA;
+            command.length = sizeof(command);
+            networkModule->send(&command,command.length);
         }
     }
     return false;
 }
 
-Game *GameServerEngine::createGame(int maxPlayer, string gameName) {
+Game *BlindGameServerEngine::createGame(GameCommand_t *command) {
     Game *game;
-    uid++;
-    char *name = new char[10];
+    GameCommand_t *blindGameCommand;
+    blindGameCommand = command;
+    GameCommand_t buffer;
 
-    sprintf(name,"game_%d",uid);
-    game = new BlindGame(uid,maxPlayer,gameName);
+    cout << "requested options are : " << blindGameCommand->maxPlayer << " : " <<
+                                        blindGameCommand->name << " : " << endl;
+    game = new BlindGame(generateUniqueId(), blindGameCommand->maxPlayer, blindGameCommand->name);
+
     // getSenderTopicName
     // send
     // getReceiverTopicName
     // send
 
-    gamelist.push_back(game);
+    startGameIntoThread(game);
+    insertANewGame(game);
 
 }
 
 bool GameServerEngine::observeGame(int gameid) {
     //
     return false;
+}
+
+bool GameServerEngine::startGameIntoThread(Game *) {
+    cout << "Game Object Starting " << endl;
+    return true;
+}
+
+GameCommand_t * BlindGameServerEngine::doHandshake() {
+    GameCommand_t *command = new GameCommand_t;
+    int ret;
+
+    listGame();// sending game lists here
+    ret = networkModule->recv(&command, sizeof(command));
+
+    if(ret != command->command.length){
+        cout << "something wrong with received data";
+    }
+
+    return command;
 }
