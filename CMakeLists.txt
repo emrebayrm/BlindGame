@@ -3,4 +3,4 @@ project(BlindGame)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(Server server.cpp engine.cpp engine.hpp game.cpp game.hpp blindGamePlayer.cpp blindGamePlayer.hpp packets.hpp blindGame.hpp blindGame.cpp point.cpp point.hpp player.hpp player.cpp networkModule.cpp networkModule.hpp engine.cpp TestEngine.cpp)
+add_executable(Server TestEngine.cpp networkModule.cpp networkModule.hpp game.hpp game.cpp engine.cpp engine.hpp blindGameServerEngine.cpp blindGameServerEngine.h blindGame.hpp blindGame.cpp point.hpp point.cpp blindGamePlayer.cpp blindGamePlayer.hpp )

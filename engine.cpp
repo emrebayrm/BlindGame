@@ -8,7 +8,8 @@
 #include "engine.hpp"
 #include "packets.hpp"
 
-bool GameServerEngine::startServer() {
+bool GameServerEngine::startServer(int debug) {
+    this->debug = debug;
     while (1) {
         GameCommand_t *command;
         ((ServerNetworkModule *) networkModule)->listenClient();
@@ -28,7 +29,7 @@ bool GameServerEngine::startServer() {
     return true;
 }
 
-bool GameServerEngine::listGame() {
+bool GameServerEngine::listGames() {
     Command *buffer;
     buffer = (Command *)(malloc(sizeof(Command) + MAX_PAYLOAD));
 
@@ -41,6 +42,7 @@ bool GameServerEngine::listGame() {
 
         networkModule->sendData(buffer, buffer->length);
     }
+    free(buffer);
     return true;
 }
 
@@ -62,25 +64,6 @@ bool GameServerEngine::joinGame(int gameid, char *playerName) {
     return false;
 }
 
-Game *BlindGameServerEngine::createGame(GameCommand_t *command) {
-    Game *game;
-    GameCommand_t *blindGameCommand;
-    blindGameCommand = command;
-    GameCommand_t buffer;
-
-    cout << "requested options are : " << blindGameCommand->maxPlayer << " : " <<
-                                        blindGameCommand->name << " : " << endl;
-    game = new BlindGame(generateUniqueId(), blindGameCommand->maxPlayer, blindGameCommand->name);
-
-    // getSenderTopicName
-    // send
-    // getReceiverTopicName
-    // send
-
-    startGameIntoThread(game);
-    insertANewGame(game);
-
-}
 
 bool GameServerEngine::observeGame(int gameid) {
     //
@@ -92,16 +75,3 @@ bool GameServerEngine::startGameIntoThread(Game *game) {
     return true;
 }
 
-GameCommand_t * BlindGameServerEngine::doHandshake() {
-    GameCommand_t *command = new GameCommand_t;
-    int ret;
-
-    listGame();// sending game lists here
-    ret = networkModule->recvData(&command, sizeof(command));
-
-    if(ret != command->command.length){
-        cout << "something wrong with received data";
-    }
-
-    return command;
-}

@@ -30,7 +30,7 @@ private:
     vector<Game *> gamelist;
     int uid = 0;
     const static int portNumber = 1550;
-
+    int debug ;
 
 public:
     int generateUniqueId(){
@@ -50,19 +50,19 @@ public:
     bool startGameIntoThread(Game *game);
 
     GameServerEngine() {
+        debug = 0;
         networkModule = new ServerNetworkModule();
         networkModule->init(portNumber);
     }
 
-    bool startServer();
+    void setNetworkModule(NetworkModule * _networkModule){
+        this->networkModule = _networkModule;
+    }
+
+    bool startServer(int debug = 0);
 
 };
 
-class BlindGameServerEngine : public GameServerEngine {
-public:
-    GameCommand_t * doHandshake();
-    Game *createGame(GameCommand_t *command);
-};
 
 /*
 void *gameManger(void* g){
