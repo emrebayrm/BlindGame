@@ -2,7 +2,7 @@
 // Created by patates on 7/17/18.
 //
 
-#include "NetworkModule.h"
+#include "networkModule.hpp"
 
 void ServerNetworkModule::init(int port) {
 
