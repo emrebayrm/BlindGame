@@ -4,35 +4,13 @@
 #include <vector>
 #include <iostream>
 #include "Game.h"
+#include "NetworkModule.h"
+#include "blindGame.hpp"
 
 #ifndef BLINDGAME_ENGINE_H
 #define BLINDGAME_ENGINE_H
 
 using namespace std;
-
-typedef enum {CREATE, JOIN, OBSERVE} command_type;
-
-struct Command{
-    command_type commandType;
-    int length;
-    void* context;
-};
-
-
-class NetworkModule{
-public:
-    virtual void init() = 0;
-//    virtual int read(int fd, void *buf,int size) = 0;
-//    virtual int write(int fd, void *buf,int size) = 0;
-};
-
-class ServerNetworkModule : public NetworkModule{
-    void init(){};
-};
-
-class ClientNetworkModule : public NetworkModule{
-    void init(){}
-};
 
 
 class Engine {
@@ -46,23 +24,40 @@ public:
 };
 
 
-class GameServerEngine : public Engine{
+class GameServerEngine : public Engine {
 private:
-    vector<Game*> gamelist;
+    vector<Game *> gamelist;
     int uid = 0;
+    const static int portNumber = 1550;
 
     struct Command doHandshake();
+
     bool listGame();
+
     bool joinGame(int gameid, char *playerName);
-    Game* createGame();
+
+    Game *createGame(int maxPlayer, string gameName);
+
     bool observeGame(int gameid);
 
+
+
 public:
-    GameServerEngine(){
+    GameServerEngine() {
         networkModule = new ServerNetworkModule();
-        networkModule->init();
+        networkModule->init(portNumber);
     }
+
     bool startServer();
+
+    virtual Game *gameObjCreator(int id, int maxPlayer, string gameName) = 0;
+
+};
+
+class BlindGameServerEngine : public GameServerEngine {
+    Game *gameObjCreator(int id, int maxPlayer, string gameName) {
+        return new BlindGame(id,maxPlayer,gameName);
+    }
 };
 
 /*

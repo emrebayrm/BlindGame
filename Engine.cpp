@@ -3,6 +3,8 @@
 //
 
 #include "Engine.h"
+#include "blindGame.hpp"
+#include "NetworkModule.h"
 
 bool GameServerEngine::startServer() {
     while(1){
@@ -12,7 +14,7 @@ bool GameServerEngine::startServer() {
 
         if(command.commandType == CREATE){
             cout << "Create" <<endl;
-            createGame();
+            createGame(0, std::__cxx11::string());
         }
         else if(command.commandType == JOIN){
             cout << "Join" <<endl;
@@ -29,6 +31,7 @@ bool GameServerEngine::startServer() {
 bool GameServerEngine::listGame() {
     for (int i = 0; i < gamelist.size(); ++i) {
         cout << gamelist[i]->toString() << endl;
+
     }
 
 }
@@ -53,18 +56,23 @@ bool GameServerEngine::joinGame(int gameid, char *playerName) {
     return false;
 }
 
-Game *GameServerEngine::createGame() {
+Game *GameServerEngine::createGame(int maxPlayer, string gameName) {
     Game *game;
     uid++;
     char *name = new char[10];
 
     sprintf(name,"game_%d",uid);
-    //game = new Game(uid,0,name);
+    game = new BlindGame(uid,maxPlayer,gameName);
+    // getSenderTopicName
+    // send
+    // getReceiverTopicName
+    // send
 
     gamelist.push_back(game);
 
 }
 
 bool GameServerEngine::observeGame(int gameid) {
+    //
     return false;
 }
