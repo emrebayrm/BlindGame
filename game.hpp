@@ -7,6 +7,7 @@
 
 #include <vector>
 #include <string>
+#include <set>
 #include "player.hpp"
 
 using namespace std;
@@ -15,6 +16,7 @@ class Game {
 protected:
     set<int> playerIdSet;
     int id;
+    vector<Player*> players;
     int maxPlayer;
     int currPlayers;
     string name;

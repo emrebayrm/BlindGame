@@ -32,6 +32,10 @@ int Game::findPlayerId() {
     return playerId;
 }
 
+string Game::toString() {
+    return "Game: " + name + ", GameId: ";
+}
+
 //getters
 int Game::getId() {
     return this->id;
