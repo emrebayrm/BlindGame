@@ -47,7 +47,7 @@ private:
     void moveCoin(int dir);
     
     vector<int> getCoinDirections();
-    void playCoin(int moveC);
+    void playCoin(int dir);
     
 public:
     BlindGame(int id, int maxPlayer, string name);
