@@ -15,12 +15,6 @@ Point::Point(int x, int y) {
     this->y = y;
 }
 
-int Point::getX() {
-    return this->x;
-}
-int Point::getY() {
-    return this->y;
-}
 void Point::incX() {
     ++this->x;
 }
@@ -36,4 +30,19 @@ void Point::decY() {
 
 int Point::distance(Point *p) {
     return abs(this->x - p->x) + abs(this->y - p->y);
+}
+
+//getters
+int Point::getX() {
+    return this->x;
+}
+int Point::getY() {
+    return this->y;
+}
+//setters
+void Point::setX(int x) {
+    this->x = x;
+}
+void Point::setY(int y) {
+    this->y = y;
 }

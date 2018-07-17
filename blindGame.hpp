@@ -9,6 +9,11 @@
 #ifndef blindGame_hpp
 #define blindGame_hpp
 
+#define EMPTY 'Y'
+#define PLAYER 'P'
+#define OBSTICLE 'X'
+#define COIN 'C'
+
 #include <stdio.h>
 
 #include <string>
@@ -43,7 +48,7 @@ public:
     int join(std::string playerName);
     int findPlayerId();
     bool checkBounds(Point p);
-    bool isValidPoint(Point p);
+    bool isValidPointMovement(Point p);
     bool* getCoinDirections();
     void playCoin();
     //getters

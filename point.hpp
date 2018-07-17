@@ -17,13 +17,17 @@ private:
     int y;
 public:
     Point(int x, int y);
-    int getX();
-    int getY();
     void incX();
     void incY();
     void decX();
     void decY();
     int distance(Point *p);
+    //gettters
+    int getX();
+    int getY();
+    //setters
+    void setX(int x);
+    void setY(int y);
 };
 
 #endif /* point_hpp */

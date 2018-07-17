@@ -81,17 +81,40 @@ bool BlindGame::checkBounds(Point p) {
     return true;
 }
 
-bool BlindGame::isValidPoint(Point p) {
-    return false;
+bool BlindGame::isValidPointMovement(Point p) {
+    if(!checkBounds(p))
+        return false;
+    if(map[p.getX()][p.getY()] == OBSTICLE)
+        return false;
+    return true;
 }
 
 bool* BlindGame::getCoinDirections() {
     bool* dirs = (bool*) malloc(sizeof(bool) * 4);
     memset(dirs, false, 4);
+    
+    //up
     Point p(coinLocation->getX() - 1, coinLocation->getY());
-    if(coinLocation->getX() > 0 && isValidPoint(p))
+    if(isValidPointMovement(p))
         dirs[0] = true;
     
+    //right
+    p.setX(coinLocation->getX());
+    p.setY(coinLocation->getY() + 1);
+    if(isValidPointMovement(p))
+        dirs[1] = true;
+    
+    //down
+    p.setX(coinLocation->getX() - 1);
+    p.setY(coinLocation->getY());
+    if(isValidPointMovement(p))
+        dirs[2] = true;
+    
+    //left
+    p.setX(coinLocation->getX());
+    p.setY(coinLocation->getY() + 1);
+    if(isValidPointMovement(p))
+        dirs[3] = true;
     return dirs;
 }
 
