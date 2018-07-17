@@ -99,17 +99,34 @@ bool BlindGame::isValidMovement(int dir, Point *p) {
 vector<int> BlindGame::getCoinDirections() {
     vector<int> dirs;
     for(int i = 0; i < 4; ++i)
-        if(isValidMovement(i,coin->getLocation()))
+        if(isValidMovement(i, coinLocation))
             dirs.push_back(i);
     return dirs;
 }
 
-void BlindGame::playCoin() {
-    vector<int> dirs = getCoinDirections();
-    if(dirs.size() == 0)
-        return;
-    int dir = rand() % dirs.size();
-    coin->move(dir);
+void BlindGame::playCoin(int moveC) {
+    for(int i = 0; i < moveC; ++i) {
+        vector<int> dirs = getCoinDirections();
+        if(dirs.size() == 0)
+            return;
+        int dir = rand() % dirs.size();
+        moveCoin(dir);
+    }
+}
+
+void BlindGame::moveCoin(int dir) {
+    if(dir == UP)
+        coinLocation->go(UP);
+    else if(dir == RIGHT)
+        coinLocation->go(RIGHT);
+    else if(dir == DOWN)
+        coinLocation->go(DOWN);
+    else if(dir == LEFT)
+        coinLocation->go(LEFT);
+}
+
+bool BlindGame::isFinished() {
+    return false;
 }
 
 //getters
@@ -123,7 +140,7 @@ int BlindGame::getCurrPlayers() {
     return this->currPlayers;
 }
 Point* BlindGame::getCoinLocation() {
-    return coin->getLocation();
+    return coinLocation;
 }
 
 int BlindGame::getId() {

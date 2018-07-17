@@ -9,8 +9,6 @@
 #ifndef player_hpp
 #define player_hpp
 
-#include <stdio.h>
-
 #include <string>
 
 using namespace std;

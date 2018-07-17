@@ -9,8 +9,6 @@
 #ifndef point_hpp
 #define point_hpp
 
-#include <stdio.h>
-
 class Point {
 private:
     int x;
