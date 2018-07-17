@@ -9,6 +9,7 @@
 #ifndef blindGamePlayer_hpp
 #define blindGamePlayer_hpp
 
+<<<<<<< Updated upstream
 #include "player.hpp"
 #include "point.hpp"
 #include "blindGame.hpp"
@@ -37,5 +38,8 @@ public:
     //moves the player in the given direction. Returns true if the player can move, false otherwise
     bool move(int dir, BlindGame* game);
 };
+=======
+#include <stdio.h>
+>>>>>>> Stashed changes
 
 #endif /* blindGamePlayer_hpp */

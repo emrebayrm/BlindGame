@@ -7,6 +7,7 @@
 //
 
 #include "blindGamePlayer.hpp"
+<<<<<<< Updated upstream
 #include "blindGame.cpp"
 
 BlindGamePlayer::BlindGamePlayer(int id, string name) : Player(id, name) {
@@ -34,3 +35,5 @@ bool BlindGamePlayer::move(int dir, BlindGame *game) {
 string BlindGamePlayer::toString() {
     return "blindGame";
 }
+=======
+>>>>>>> Stashed changes
