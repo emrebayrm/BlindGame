@@ -29,6 +29,7 @@ int BlindGame::join(string playerName) {
     playerId = findPlayerId();
     Player *player = new BlindGamePlayer(playerId, playerName);
     getPlayers()[playerId] = player;
+    setCurrPlayers(getCurrPlayers() + 1);
     return playerId;
 }
 
