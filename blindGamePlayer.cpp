@@ -7,7 +7,6 @@
 //
 
 #include "blindGamePlayer.hpp"
-<<<<<<< Updated upstream
 #include "blindGame.cpp"
 
 BlindGamePlayer::BlindGamePlayer(int id, string name) : Player(id, name) {
@@ -16,7 +15,7 @@ BlindGamePlayer::BlindGamePlayer(int id, string name) : Player(id, name) {
 }
 
 bool BlindGamePlayer::isDone() {
-    return currMove == maxMoves;
+    return currMove == maxMove;
 }
 
 void BlindGamePlayer::incCurrMove() {
@@ -28,12 +27,16 @@ void BlindGamePlayer::resetCurrMove() {
 }
 
 bool BlindGamePlayer::move(int dir, BlindGame *game) {
-    
+    if(isDone())
+        return false;
+    if(game->isValidMovement(dir, location)) {
+        location->go(dir);
+        incCurrMove();
+        return true;
+    }
     return false;
 }
 
 string BlindGamePlayer::toString() {
     return "blindGame";
 }
-=======
->>>>>>> Stashed changes

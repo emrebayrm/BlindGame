@@ -80,7 +80,7 @@ bool GameServerEngine::observeGame(int gameid) {
     return false;
 }
 
-bool GameServerEngine::startGameIntoThread(Game *) {
+bool GameServerEngine::startGameIntoThread(Game *game) {
     cout << "Game Object Starting " << endl;
     return true;
 }

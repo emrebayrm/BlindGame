@@ -8,6 +8,7 @@
 
 #include <cstdlib>
 #include "point.hpp"
+#include "blindGame.hpp"
 
 Point::Point(int x, int y) {
     this->x = x;
@@ -29,6 +30,18 @@ void Point::decY() {
 
 int Point::distance(Point *p) {
     return abs(this->x - p->x) + abs(this->y - p->y);
+}
+
+void Point::go(int dir) {
+    if(dir == UP) {
+        decX();
+    } else if(dir == RIGHT) {
+        incY();
+    } else if(dir == DOWN) {
+        incX();
+    } else if(dir == LEFT) {
+        decY();
+    }
 }
 
 //getters

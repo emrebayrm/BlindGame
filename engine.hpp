@@ -36,10 +36,10 @@ public:
     int generateUniqueId(){
         return ++uid;
     }
-    void insertANewGame(Game * g){
-        gamelist.push_back(g);
+    void insertNewGame(Game *game){
+        gamelist.push_back(game);
     }
-    bool listGame();
+    bool listGames();
 
     bool joinGame(int gameid, char *playerName);
 
@@ -47,7 +47,7 @@ public:
 
     bool observeGame(int gameid);
 
-    bool startGameIntoThread(Game *);
+    bool startGameIntoThread(Game *game);
 
     GameServerEngine() {
         networkModule = new ServerNetworkModule();

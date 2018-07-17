@@ -14,6 +14,11 @@
 #define OBSTICLE 'X'
 #define COIN 'C'
 
+#define UP 0
+#define RIGHT 1
+#define DOWN 2
+#define LEFT 3
+
 #include <stdio.h>
 
 #include <string>
@@ -39,7 +44,7 @@ private:
     int findPlayerId();
     bool checkBounds(Point *p);
     bool isValidPoint(Point *p);
-    bool isValidMovement(int dir, Point *p);
+    
     bool* getCoinDirections();
     void playCoin();
     
@@ -47,7 +52,7 @@ public:
     BlindGame(int id, int maxPlayer, string name);
     vector<pair<int, int>> getCoinDistances();
     int join(string playerName);    
-    
+    bool isValidMovement(int dir, Point *p);
     //getters
     char** getMap();
     int getMaxPlayer();
