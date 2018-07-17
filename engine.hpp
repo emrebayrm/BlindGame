@@ -26,19 +26,19 @@ public:
 
 class GameServerEngine : public Engine {
 private:
-    vector<Game *> gamelist;
+    vector<Game*> gamelist;
     int uid = 0;
     const static int portNumber = 1550;
 
     struct Command doHandshake();
 
-    bool listGame();
+    bool listGames();
 
-    bool joinGame(int gameid, char *playerName);
+    bool joinGame(int gameId, char *playerName);
 
     Game *createGame(int maxPlayer, string gameName);
 
-    bool observeGame(int gameid);
+    bool observeGame(int gameId);
 
 
 

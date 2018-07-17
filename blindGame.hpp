@@ -22,6 +22,7 @@
 
 #include "player.hpp"
 #include "game.hpp"
+#include "point.hpp"
 
 using namespace std;
 
@@ -35,17 +36,18 @@ private:
     int calculateMapRow(int maxPlayer);
     int calculateMapCol(int maxPlayer);
     char **createMap(int mapRow, int mapCol);
+    int findPlayerId();
+    bool checkBounds(Point *p);
+    bool isValidPoint(Point *p);
+    bool isValidMovement(int dir, Point *p);
+    bool* getCoinDirections();
+    void playCoin();
     
 public:
     BlindGame(int id, int maxPlayer, string name);
-    bool movePlayer(Player *player, int dir);
     vector<pair<int, int>> getCoinDistances();
-    int join(std::string playerName);
-    int findPlayerId();
-    bool checkBounds(Point p);
-    bool isValidPointMovement(Point p);
-    bool* getCoinDirections();
-    void playCoin();
+    int join(string playerName);    
+    
     //getters
     char** getMap();
     int getMaxPlayer();

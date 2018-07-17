@@ -7,3 +7,30 @@
 //
 
 #include "blindGamePlayer.hpp"
+#include "blindGame.cpp"
+
+BlindGamePlayer::BlindGamePlayer(int id, string name) : Player(id, name) {
+    this->location = NULL;
+    resetCurrMove();
+}
+
+bool BlindGamePlayer::isDone() {
+    return currMove == maxMoves;
+}
+
+void BlindGamePlayer::incCurrMove() {
+    ++currMove;
+}
+
+void BlindGamePlayer::resetCurrMove() {
+    currMove = 0;
+}
+
+bool BlindGamePlayer::move(int dir, BlindGame *game) {
+    
+    return false;
+}
+
+string BlindGamePlayer::toString() {
+    return "blindGame";
+}

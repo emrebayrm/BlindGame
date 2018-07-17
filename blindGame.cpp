@@ -8,10 +8,9 @@
 
 #include "blindGame.hpp"
 
-#include <iostream>
 #include <string>
 #include <cstring>
-#include "player.hpp"
+#include "blindGamePlayer.hpp"
 
 using namespace std;
 
@@ -32,7 +31,7 @@ int BlindGame::join(string playerName) {
         return -1;
     int playerId;
     playerId = findPlayerId();
-    Player *player = new Player(playerId, playerName);
+    Player *player = new BlindGamePlayer(playerId, playerName);
     getPlayers()[playerId] = player;
     return playerId;
 }
@@ -69,20 +68,34 @@ int BlindGame::findPlayerId() {
     return playerId;
 }
 
-bool BlindGame::movePlayer(Player *player, int dir) {
-    return false;
-}
 
-bool BlindGame::checkBounds(Point p) {
-    if(p.getX() < 0 || p.getY() < 0 || p.getX() >= mapRow || p.getY() >= mapCol)
+bool BlindGame::checkBounds(Point *p) {
+    if(p->getX() < 0 || p->getY() < 0 || p->getX() >= mapRow || p->getY() >= mapCol)
         return false;
     return true;
 }
 
-bool BlindGame::isValidPointMovement(Point p) {
+bool BlindGame::isValidPoint(Point *p) {
     if(!checkBounds(p))
         return false;
-    if(map[p.getX()][p.getY()] == OBSTICLE)
+    if(map[p->getX()][p->getY()] == OBSTICLE)
+        return false;
+    return true;
+}
+
+bool BlindGame::isValidMovement(int dir, Point *p) {
+    Point *point;
+    if(dir == UP) {
+        point = new Point(p->getX() + 1, p->getY());
+    } else if(dir == RIGHT) {
+        point = new Point(p->getX(), p->getY() + 1);
+    } else if(dir == DOWN) {
+        point = new Point(p->getX() - 1, p->getY());
+    } else if(dir == LEFT) {
+        point = new Point(p->getX(), p->getY() - 1);
+    } else
+        return false;
+    if(!isValidPoint(point))
         return false;
     return true;
 }
@@ -91,27 +104,13 @@ bool* BlindGame::getCoinDirections() {
     bool* dirs = (bool*) malloc(sizeof(bool) * 4);
     memset(dirs, false, 4);
     
-    //up
-    Point p(coinLocation->getX() - 1, coinLocation->getY());
-    if(isValidPointMovement(p))
+    if(isValidMovement(UP, coinLocation))
         dirs[UP] = true;
-    
-    //right
-    p.setX(coinLocation->getX());
-    p.setY(coinLocation->getY() + 1);
-    if(isValidPointMovement(p))
+    if(isValidMovement(RIGHT, coinLocation))
         dirs[RIGHT] = true;
-    
-    //down
-    p.setX(coinLocation->getX() - 1);
-    p.setY(coinLocation->getY());
-    if(isValidPointMovement(p))
+    if(isValidMovement(DOWN, coinLocation))
         dirs[DOWN] = true;
-    
-    //left
-    p.setX(coinLocation->getX());
-    p.setY(coinLocation->getY() + 1);
-    if(isValidPointMovement(p))
+    if(isValidMovement(LEFT, coinLocation))
         dirs[LEFT] = true;
     return dirs;
 }
