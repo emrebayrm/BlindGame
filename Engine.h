@@ -20,14 +20,19 @@ struct Command{
 
 
 class NetworkModule{
+private:
+    int fd;
+    int port;
 public:
-    virtual void init() = 0;
-//    virtual int read(int fd, void *buf,int size) = 0;
-//    virtual int write(int fd, void *buf,int size) = 0;
+    virtual void init(int port) = 0;
+    virtual int send(void *buf, int size) = 0;
+    virtual int recv(void *buf, int size) = 0;
 };
 
 class ServerNetworkModule : public NetworkModule{
-    void init(){};
+    void init(){
+
+    };
 };
 
 class ClientNetworkModule : public NetworkModule{
@@ -54,7 +59,7 @@ private:
     struct Command doHandshake();
     bool listGame();
     bool joinGame(int gameid, char *playerName);
-    Game* createGame();
+    Game *createGame(int maxPlayer, string gameName);
     bool observeGame(int gameid);
 
 public:
@@ -63,7 +68,12 @@ public:
         networkModule->init();
     }
     bool startServer();
+
+    virtual Game* gameObjCreator() = 0;
+
 };
+
+
 
 /*
 void *gameManger(void* g){
