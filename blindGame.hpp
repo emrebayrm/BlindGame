@@ -21,7 +21,7 @@
 #include <set>
 
 #include "player.hpp"
-#include "Game.h"
+#include "game.hpp"
 
 using namespace std;
 

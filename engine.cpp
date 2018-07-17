@@ -2,9 +2,9 @@
 // Created by patates on 7/16/18.
 //
 
-#include "Engine.h"
+#include "engine.hpp"
 #include "blindGame.hpp"
-#include "NetworkModule.h"
+#include "networkModule.hpp"
 
 bool GameServerEngine::startServer() {
     while(1){
