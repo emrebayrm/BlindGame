@@ -4,6 +4,7 @@
 
 #include "Engine.h"
 #include "blindGame.hpp"
+#include "NetworkModule.h"
 
 bool GameServerEngine::startServer() {
     while(1){
