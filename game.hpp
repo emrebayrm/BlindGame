@@ -11,31 +11,31 @@
 
 using namespace std;
 
-class Game{
-private:
-    int uid_p = 0;
-    vector<Player*> players;
+class Game {
+protected:
+    set<int> playerIdSet;
+    int id;
+    int maxPlayer;
+    int currPlayers;
+    string name;
+    //finds a valid id for a player. Returns -1 if cannot find
+    int findPlayerId();
 public:
-    virtual string getName() = 0;
-    virtual int getId() = 0;
-    virtual int getMaxPlayer() = 0;
-    vector<Player*> getPlayers() {
-        return players;
-    };
-
-    virtual int getMapRow() = 0;
-    virtual int getMapCol() = 0;
+    Game(int id, int maxPlayer, string name);
+    int getId();
+    vector<Player*> getPlayers();
+    int getMaxPlayer();
+    int getCurrPlayers();
+    string getName();
 
     virtual string toString() = 0;
-
-    virtual int join(string arr) = 0;
+    
+    //adds the player to the game. Returns playerId
+    virtual int join(string playerName) = 0;
+    
+    //returns true if the game is finished, false otherwise
+    virtual bool isFinished() = 0;
 
 };
-/*
-class BlindGame : public Game{
-public:
-    BlindGame(int id, int a, char *n);
-};
-*/
 
 #endif //BLINDGAME_GAME_H
