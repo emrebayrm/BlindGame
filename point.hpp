@@ -20,6 +20,7 @@ private:
 public:
     Point(int x, int y);
     
+    bool operator==(const Point &p);
     int distance(Point *p);
     void go(int dir);
     //gettters

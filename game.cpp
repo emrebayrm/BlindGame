@@ -16,6 +16,7 @@ Game::Game(int id, int maxPlayer, string name) {
     this->maxPlayer = maxPlayer;
     this->name = name;
     this->currPlayers = 0;
+    players.resize(maxPlayer);
 }
 
 int Game::findPlayerId() {

@@ -29,6 +29,7 @@ int BlindGame::join(string playerName) {
     playerId = findPlayerId();
     Player *player = new BlindGamePlayer(playerId, playerName);
     getPlayers()[playerId] = player;
+    setCurrPlayers(getCurrPlayers() + 1);
     return playerId;
 }
 
@@ -126,7 +127,12 @@ void BlindGame::moveCoin(int dir) {
 }
 
 bool BlindGame::isFinished() {
-    return false;
+    for(int i = 0; i < getPlayers().size(); ++i) {
+        BlindGamePlayer *p = (BlindGamePlayer*) getPlayers()[i];
+        if(p->getLocation()->getX() == coinLocation->getX() && p->getLocation()->getY() == coinLocation->getY())
+            return true;
+    }
+    return true;
 }
 
 //getters
