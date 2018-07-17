@@ -10,34 +10,6 @@
 
 using namespace std;
 
-typedef enum {CREATE, JOIN, OBSERVE} command_type;
-
-struct Command{
-    command_type commandType;
-    int length;
-    void* context;
-};
-
-
-class NetworkModule{
-private:
-    int fd;
-    int port;
-public:
-    virtual void init(int port) = 0;
-    virtual int send(void *buf, int size) = 0;
-    virtual int recv(void *buf, int size) = 0;
-};
-
-class ServerNetworkModule : public NetworkModule{
-    void init(){
-
-    };
-};
-
-class ClientNetworkModule : public NetworkModule{
-    void init(){}
-};
 
 
 class Engine {
