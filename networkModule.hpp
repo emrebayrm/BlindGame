@@ -7,33 +7,36 @@
 
 
 
+
 class NetworkModule{
 private:
-    int fd;
+    int fd=-1;
     int port;
 public:
     virtual void init(int port) = 0;
-    virtual int send(void *buf, int size) = 0;
-    virtual int recv(void *buf, int size) = 0;
+    virtual int sendData(void *buf, int size) = 0;
+    virtual int recvData(void *buf, int size) = 0;
     int getFd(){ return fd;}
     int getPort(){ return port;}
+    void setFd(int _fd){ fd=_fd;}
 
 };
 
 class ServerNetworkModule : public NetworkModule{
-public:
+private:
+    int currentClientFd=-1; 
+public: 
     void init(int port);
-    int send(void *buf, int size);
-    int recv(void *buf, int size);
-    void listen();
+    int sendData(void *buf, int size);
+    int recvData(void *buf, int size);
+    void listenClient();
 
 };
 
 class ClientNetworkModule : public NetworkModule{
-public:
     void init(int port);
-    int send(void *buf, int size);
-    int recv(void *buf, int size);
+    int sendData(void *buf, int size);
+    int recvData(void *buf, int size);
 };
 
 

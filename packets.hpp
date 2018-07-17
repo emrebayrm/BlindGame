@@ -27,7 +27,7 @@ typedef enum {CREATE, JOIN, OBSERVE,DATA} command_type;
 struct Command{
     command_type commandType;
     int length;
-    void *context;
+    char context[0];
 };
 
 typedef struct {

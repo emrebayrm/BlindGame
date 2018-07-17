@@ -4,22 +4,89 @@
 
 #include "networkModule.hpp"
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <netinet/in.h>
+#include <error.h>
+#include <memory.h>
+
+#define MAX_LISTEN 20
 void ServerNetworkModule::init(int port) {
+    struct sockaddr_in serverAddr;
+    socklen_t serverlen;
+    int fdSocket=-1;
+    // clear server adress
+    memset(&serverAddr,0,sizeof(struct sockaddr_in));
+
+    if((fdSocket = socket(AF_INET,SOCK_STREAM,0))<0){
+        perror("Socket initialize : ");
+        setFd(-1);
+    }
+    int enable = 1;
+    if (setsockopt(fdSocket, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int)) < 0)
+        perror("setsockopt(SO_REUSEADDR) failed");
+
+    // IPv4
+    serverAddr.sin_family = AF_INET;
+    // all local ip addresses
+    // convert ip address number to network bytes
+    serverAddr.sin_addr.s_addr=htonl(INADDR_ANY); // host to network long integer
+    // initialize port number
+    // convert short integer port num to network bytes
+    serverAddr.sin_port = htons(port);// host to network short integer
+
+    serverlen = sizeof(struct sockaddr_in);
+
+    if(bind(fdSocket,(struct sockaddr*)&serverAddr,serverlen)<0){
+        perror("Binding socket : ");
+        setFd(-1);
+    }
+
+    // listen socket comming connetions
+    if(listen(fdSocket,MAX_LISTEN)){
+        perror("Listen socket : ");
+        setFd(-1);
+    }
+
+    setFd(fdSocket);
 
 }
 
-int ServerNetworkModule::send(void *buf, int size) {
-    return 0;
+int ServerNetworkModule::sendData(void *buf, int size) {
+    if(currentClientFd<0){
+	printf("Send Error!");
+    	return 0;
+	}
+    return send(currentClientFd,buf,size,0);
 }
 
-int ServerNetworkModule::recv(void *buf, int size) {
-    return 0;
+int ServerNetworkModule::recvData(void *buf, int size) {
+    if(currentClientFd<0){
+	printf("Receive Error!");
+    	return 0;
+	}
+    return recv(currentClientFd,buf,size,0);
+}
+
+void ServerNetworkModule::listenClient() {
+    struct sockaddr_in clientAddr; // client socket informations
+    socklen_t clientAddrLen; // client socket address length
+
+    // initialize size of struct
+    clientAddrLen = sizeof(struct sockaddr_in);
+    if(getFd()<0) {
+	perror("Initialize socket");
+	return;}
+    //clear junk values
+    memset(&clientAddr,0,clientAddrLen);
+    currentClientFd = accept(getFd(),(struct sockaddr*)&clientAddr,&clientAddrLen);
 }
 
 
-
-
-int ClientNetworkModule::send(void *buf, int size) {
+int ClientNetworkModule::sendData(void *buf, int size) {
     return 0;
 }
 
@@ -27,6 +94,6 @@ void ClientNetworkModule::init(int port) {
 
 }
 
-int ClientNetworkModule::recv(void *buf, int size) {
+int ClientNetworkModule::recvData(void *buf, int size) {
     return 0;
 }
