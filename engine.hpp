@@ -3,13 +3,8 @@
 //
 #include <vector>
 #include <iostream>
-<<<<<<< HEAD
-#include "Game.h"
-#include "NetworkModule.h"
-=======
 #include "game.hpp"
 #include "networkModule.hpp"
->>>>>>> ebb1965dfec01bfe5e249a48a2b4850ed655f75c
 #include "blindGame.hpp"
 
 #ifndef BLINDGAME_ENGINE_H

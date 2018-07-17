@@ -7,7 +7,7 @@ using namespace std;
 
 
 int main() {
-    GameServerEngine gameServerEngine;
+    BlindGameServerEngine gameServerEngine;
     gameServerEngine.startServer();
     return 0;
 }
