@@ -6,6 +6,7 @@
 #include "game.hpp"
 #include "networkModule.hpp"
 #include "blindGame.hpp"
+#include "packets.hpp"
 
 #ifndef BLINDGAME_ENGINE_H
 #define BLINDGAME_ENGINE_H
@@ -20,7 +21,7 @@ protected:
 private:
 
 public:
-    virtual struct Command doHandshake() = 0;
+    virtual GameCommand_t * doHandshake() = 0;
 };
 
 
@@ -29,20 +30,23 @@ private:
     vector<Game *> gamelist;
     int uid = 0;
     const static int portNumber = 1550;
-
-    struct Command doHandshake();
-
+public:
+    int generateUniqueId(){
+        return ++uid;
+    }
+    void insertANewGame(Game * g){
+        gamelist.push_back(g);
+    }
     bool listGame();
 
     bool joinGame(int gameid, char *playerName);
 
-    Game *createGame(int maxPlayer, string gameName);
+    virtual Game *createGame(GameCommand_t *command) = 0;
 
     bool observeGame(int gameid);
 
+    bool startGameIntoThread(Game *);
 
-
-public:
     GameServerEngine() {
         networkModule = new ServerNetworkModule();
         networkModule->init(portNumber);
@@ -55,9 +59,12 @@ public:
 };
 
 class BlindGameServerEngine : public GameServerEngine {
+public:
     Game *gameObjCreator(int id, int maxPlayer, string gameName) {
         return new BlindGame(id,maxPlayer,gameName);
     }
+    GameCommand_t * doHandshake();
+    Game *createGame(GameCommand_t *command);
 };
 
 /*
