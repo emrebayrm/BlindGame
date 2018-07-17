@@ -10,6 +10,7 @@
 
 #include <iostream>
 #include <string>
+#include <cstring>
 #include "player.hpp"
 
 using namespace std;
@@ -19,7 +20,7 @@ using namespace std;
 #define DOWN 2;
 #define LEFT 3;
 
-BlindGame::BlindGame(int id, int maxPlayer, string name) {
+BlindGame::BlindGame(int id, int maxPlayer, string name):Game() {
     this->maxPlayer = maxPlayer;
     this->currPlayers = 0;
     this->name = name;
@@ -33,9 +34,10 @@ BlindGame::BlindGame(int id, int maxPlayer, string name) {
 int BlindGame::join(string playerName) {
     if(currPlayers == maxPlayer)
         return -1;
-    int playerId = findPlayerId();
+    int playerId;
+    playerId = findPlayerId();
     Player *player = new Player(playerId, playerName);
-    players[playerId] = player;
+    getPlayers()[playerId] = player;
     return playerId;
 }
 
@@ -135,9 +137,7 @@ int BlindGame::getCurrPlayers() {
 Point* BlindGame::getCoinLocation() {
     return this->coinLocation;
 }
-vector<Player*> BlindGame::getPlayers() {
-    return this->players;
-}
+
 int BlindGame::getId() {
     return this->id;
 }
