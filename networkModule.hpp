@@ -5,7 +5,7 @@
 #ifndef BLINDGAME_NETWORKMODULE_H
 #define BLINDGAME_NETWORKMODULE_H
 
-
+#define MAX_PAYLOAD 200
 
 
 class NetworkModule{
@@ -24,8 +24,8 @@ public:
 
 class ServerNetworkModule : public NetworkModule{
 private:
-    int currentClientFd=-1; 
-public: 
+    int currentClientFd=-1;
+public:
     void init(int port);
     int sendData(void *buf, int size);
     int recvData(void *buf, int size);
