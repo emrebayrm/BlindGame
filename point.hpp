@@ -15,13 +15,15 @@ class Point {
 private:
     int x;
     int y;
-public:
-    Point(int x, int y);
     void incX();
     void incY();
     void decX();
     void decY();
+public:
+    Point(int x, int y);
+    
     int distance(Point *p);
+    void go(int dir);
     //gettters
     int getX();
     int getY();

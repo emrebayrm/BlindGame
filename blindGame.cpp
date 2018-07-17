@@ -14,11 +14,6 @@
 
 using namespace std;
 
-#define UP 0
-#define RIGHT 1
-#define DOWN 2
-#define LEFT 3
-
 BlindGame::BlindGame(int id, int maxPlayer, string name) : Game(id, maxPlayer, name) {
     this->mapRow = calculateMapRow(maxPlayer);
     this->mapCol = calculateMapCol(maxPlayer);
