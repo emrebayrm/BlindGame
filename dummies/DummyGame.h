@@ -21,7 +21,7 @@ public:
 
 class DummyPlayer : public Player{
 public:
-    DummyPlayer(int id, const string &name);
+    DummyPlayer(int id, const string name);
 
     string toString() override;
 

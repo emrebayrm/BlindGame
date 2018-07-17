@@ -4,11 +4,13 @@
 
 #include "engine.hpp"
 #include "packets.hpp"
-#include "blindGameServerEngine.hpp"
+#include "dummies/DummyNetworkModule.h"
+#include "dummies/DummyGameServerEngine.h"
 
 int main(){
-    BlindGameServerEngine gameServerEngine;
-    //DummyNetworkModule *testNetworkModule = new DummyNetworkModule();
-    //gameServerEngine.setNetworkModule(testNetworkModule);
+    DummyGameServerEngine gameServerEngine;
+    DummyNetworkModule *testNetworkModule = new DummyNetworkModule();
+    testNetworkModule->init(55);
+    gameServerEngine.setNetworkModule(testNetworkModule);
     gameServerEngine.startServer();
 }

@@ -9,8 +9,7 @@ int DummyGame::join(string playerName) {
         return -1;
     uid++;
     DummyPlayer *player = new DummyPlayer(uid,playerName);
-    getPlayers().push_back(player);
-
+    pushPlayer(player);
     return player->getId();
 }
 
@@ -22,7 +21,7 @@ DummyGame::DummyGame(int id, int maxPlayer, const string &name) : Game(id, maxPl
 
 }
 
-DummyPlayer::DummyPlayer(int id, const string &name) : Player(id, name) {}
+DummyPlayer::DummyPlayer(int id, const string name) : Player(id, name) {}
 
 string DummyPlayer::toString() {
     return to_string(getId()) + "  " + getName();

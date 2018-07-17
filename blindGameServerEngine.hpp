@@ -11,8 +11,8 @@
 
 class BlindGameServerEngine : public GameServerEngine {
 public:
-    GameCommand_t * doHandshake();
-    Game *createGame(GameCommand_t *command);
+    Command * doHandshake();
+    Game *createGame(GameCreateCommand_t command);
 };
 
 

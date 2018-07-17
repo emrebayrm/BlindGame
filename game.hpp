@@ -23,6 +23,10 @@ protected:
     //finds a valid id for a player. Returns -1 if cannot find
     int findPlayerId();
 public:
+    void pushPlayer(Player* player){
+        players.push_back(player);
+        ++currPlayers;
+    }
     Game(int id, int maxPlayer, string name);
     int getId();
     vector<Player*> getPlayers();
