@@ -2,15 +2,19 @@
 // Created by patates on 7/16/18.
 //
 
+#include <cstring>
 #include "blindGame.hpp"
 #include "networkModule.hpp"
 #include "engine.hpp"
 #include "packets.hpp"
-
-bool GameServerEngine::startServer() {
+//TODO: debug level
+bool GameServerEngine::startServer(int debug) {
+    this->debug = debug;
     while (1) {
         GameCommand_t *command;
-        ((ServerNetworkModule *) networkModule)->listen();
+        if(debug == 1)
+            listGames();
+        ((ServerNetworkModule *) networkModule)->listenClient();
         command = doHandshake();
 
         if (command->command.commandType == CREATE) {
@@ -27,53 +31,43 @@ bool GameServerEngine::startServer() {
     return true;
 }
 
-bool GameServerEngine::listGame() {
-    Command buffer;
+bool GameServerEngine::listGames() {
+    Command *buffer;
+    buffer = (Command *)(malloc(sizeof(Command) + MAX_PAYLOAD));
 
     for (int i = 0; i < gamelist.size(); ++i) {
-        buffer.commandType = DATA;
-        buffer.length = gamelist[i]->toString().size() + sizeof(buffer);
-        buffer.context = (void *)gamelist[i]->toString().c_str();
+        memset(buffer,0,MAX_PAYLOAD);
+        buffer->commandType = DATA;
+        buffer->length = gamelist[i]->toString().size() + sizeof(Command);
 
-        networkModule->send(&buffer, buffer.length);
+        memcpy(buffer->context, (void *)gamelist[i]->toString().c_str(),gamelist[i]->toString().size());
+
+        networkModule->sendData(buffer, buffer->length);
     }
+    free(buffer);
     return true;
 }
 
 bool GameServerEngine::joinGame(int gameid, char *playerName) {
     int pid;
-    Command command;
+    Command *command;
+    command = (Command *)(malloc(sizeof(Command) + MAX_PAYLOAD));
+
     for (int i = 0; i < gamelist.size(); ++i) {
         if (gamelist[i]->getId() == gameid) {
+            memset(command,0,MAX_PAYLOAD);
+
             pid = gamelist[i]->join(playerName);
-            command.context = &pid;
-            command.commandType = DATA;
-            command.length = sizeof(command);
-            networkModule->send(&command,command.length);
+
+            memcpy(command->context,&pid, sizeof(pid));
+            command->commandType = DATA;
+            command->length = sizeof(Command) + sizeof(pid) ;
+            networkModule->sendData(&command,command->length);
         }
     }
     return false;
 }
 
-Game *BlindGameServerEngine::createGame(GameCommand_t *command) {
-    Game *game;
-    GameCommand_t *blindGameCommand;
-    blindGameCommand = command;
-    GameCommand_t buffer;
-
-    cout << "requested options are : " << blindGameCommand->maxPlayer << " : " <<
-                                        blindGameCommand->name << " : " << endl;
-    game = new BlindGame(generateUniqueId(), blindGameCommand->maxPlayer, blindGameCommand->name);
-
-    // getSenderTopicName
-    // send
-    // getReceiverTopicName
-    // send
-
-    startGameIntoThread(game);
-    insertANewGame(game);
-
-}
 
 bool GameServerEngine::observeGame(int gameid) {
     //
@@ -85,16 +79,3 @@ bool GameServerEngine::startGameIntoThread(Game *game) {
     return true;
 }
 
-GameCommand_t * BlindGameServerEngine::doHandshake() {
-    GameCommand_t *command = new GameCommand_t;
-    int ret;
-
-    listGame();// sending game lists here
-    ret = networkModule->recv(&command, sizeof(command));
-
-    if(ret != command->command.length){
-        cout << "something wrong with received data";
-    }
-
-    return command;
-}

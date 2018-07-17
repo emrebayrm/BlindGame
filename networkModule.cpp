@@ -85,15 +85,41 @@ void ServerNetworkModule::listenClient() {
     currentClientFd = accept(getFd(),(struct sockaddr*)&clientAddr,&clientAddrLen);
 }
 
+void ClientNetworkModule::init(int port) {
+  int sockfd = 0,n = 0;
+  struct sockaddr_in serv_addr;
+  if((sockfd = socket(AF_INET, SOCK_STREAM, 0))< 0)
+    {
+      printf("\n Error : Could not create socket \n");
+      return ;
+    }
+ 
+  serv_addr.sin_family = AF_INET;
+  serv_addr.sin_port = htons(port);
+  serv_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
+ 
+  if(connect(sockfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr))<0)
+    {
+      printf("\n Error : Connect Failed \n");
+      return ;
+    }
+    setFd(sockfd);
+}
 
 int ClientNetworkModule::sendData(void *buf, int size) {
-    return 0;
+    if(fd<0){
+		printf("Send Error!");
+    	return -1;
+	}
+    return send(fd,buf,size,0);
 }
 
-void ClientNetworkModule::init(int port) {
 
-}
 
 int ClientNetworkModule::recvData(void *buf, int size) {
-    return 0;
+    if(fd<0){
+		printf("Receive Error!");
+    	return -1;
+	}
+    return recv(fd,buf,size,0);
 }

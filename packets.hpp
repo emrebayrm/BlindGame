@@ -19,7 +19,6 @@ struct Game_topics_info{
     char position_tpc[MAX_TOPIC_NAME]; // pos_id
     char distance_tpc[MAX_TOPIC_NAME]; // dist_id
 };
-typedef enum {LEFT,RIGHT,UP,DOWN} direction_t;
 
 
 typedef enum {CREATE, JOIN, OBSERVE,DATA} command_type;
@@ -30,6 +29,7 @@ struct Command{
     char context[0];
 };
 
+//TODO: all operations commad_t
 typedef struct {
     Command command;
     int maxPlayer;
