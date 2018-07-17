@@ -9,6 +9,17 @@
 #ifndef coin_hpp
 #define coin_hpp
 
-#include <stdio.h>
+#include "blindGamePlayer.hpp"
+#include <string>
+
+class BlindGamePlayer;
+
+class Coin : public BlindGamePlayer {
+public:
+    Coin();
+    Coin(int id, string name);
+    bool move(int dir);
+    string toString();
+};
 
 #endif /* coin_hpp */

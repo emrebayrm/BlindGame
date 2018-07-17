@@ -11,14 +11,15 @@
 #include <string>
 #include <cstring>
 #include "blindGamePlayer.hpp"
+#include <time.h>
 
 using namespace std;
 
 BlindGame::BlindGame(int id, int maxPlayer, string name) : Game(id, maxPlayer, name) {
     this->mapRow = calculateMapRow(maxPlayer);
     this->mapCol = calculateMapCol(maxPlayer);
-    this->coinLocation = NULL;
     createMap(mapRow, mapCol);
+    srand(time(NULL));
 }
 
 int BlindGame::join(string playerName) {
@@ -95,23 +96,20 @@ bool BlindGame::isValidMovement(int dir, Point *p) {
     return true;
 }
 
-bool* BlindGame::getCoinDirections() {
-    bool* dirs = (bool*) malloc(sizeof(bool) * 4);
-    memset(dirs, false, 4);
-    
-    if(isValidMovement(UP, coinLocation))
-        dirs[UP] = true;
-    if(isValidMovement(RIGHT, coinLocation))
-        dirs[RIGHT] = true;
-    if(isValidMovement(DOWN, coinLocation))
-        dirs[DOWN] = true;
-    if(isValidMovement(LEFT, coinLocation))
-        dirs[LEFT] = true;
+vector<int> BlindGame::getCoinDirections() {
+    vector<int> dirs;
+    for(int i = 0; i < 4; ++i)
+        if(isValidMovement(i,coin->getLocation()))
+            dirs.push_back(i);
     return dirs;
 }
 
 void BlindGame::playCoin() {
-    
+    vector<int> dirs = getCoinDirections();
+    if(dirs.size() == 0)
+        return;
+    int dir = rand() % dirs.size();
+    coin->move(dir);
 }
 
 //getters
@@ -125,7 +123,7 @@ int BlindGame::getCurrPlayers() {
     return this->currPlayers;
 }
 Point* BlindGame::getCoinLocation() {
-    return this->coinLocation;
+    return coin->getLocation();
 }
 
 int BlindGame::getId() {

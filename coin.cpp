@@ -7,3 +7,13 @@
 //
 
 #include "coin.hpp"
+
+Coin::Coin(){}
+
+bool Coin::move(int dir) {
+    return false;
+}
+
+string Coin::toString() {
+    return "";
+}

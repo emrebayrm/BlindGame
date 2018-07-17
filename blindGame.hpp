@@ -28,6 +28,7 @@
 #include "player.hpp"
 #include "game.hpp"
 #include "point.hpp"
+#include "coin.hpp"
 
 using namespace std;
 
@@ -36,7 +37,7 @@ private:
     char **map;
     int mapRow;
     int mapCol;
-    Point *coinLocation;
+    Coin *coin;
     
     int calculateMapRow(int maxPlayer);
     int calculateMapCol(int maxPlayer);
@@ -45,7 +46,7 @@ private:
     bool checkBounds(Point *p);
     bool isValidPoint(Point *p);
     
-    bool* getCoinDirections();
+    vector<int> getCoinDirections();
     void playCoin();
     
 public:
@@ -62,9 +63,7 @@ public:
     string getName();
     //setters
     void setCurrPlayers(int currPlayers);
-    bool isFinished(){
-        return false;
-    }
+    bool isFinished();
 };
 
 
