@@ -6,6 +6,7 @@
 //  Copyright © 2018 Sincap. All rights reserved.
 //
 
+#include <cstdlib>
 #include "point.hpp"
 
 Point::Point(int x, int y) {

@@ -31,7 +31,7 @@ private:
     int uid = 0;
     const static int portNumber = 1550;
 
-<<<<<<< HEAD
+
 public:
     int generateUniqueId(){
         return ++uid;
@@ -40,21 +40,10 @@ public:
         gamelist.push_back(g);
     }
     bool listGame();
-=======
-    struct Command doHandshake();
-
-    bool listGame();
-
-    bool joinGame(int gameid, char *playerName);
->>>>>>> parent of 15ac76b... hi
 
     bool joinGame(int gameid, char *playerName);
 
-<<<<<<< HEAD
     virtual Game *createGame(GameCommand_t *command) = 0;
-=======
-    bool observeGame(int gameid);
->>>>>>> parent of 15ac76b... hi
 
     bool observeGame(int gameid);
 

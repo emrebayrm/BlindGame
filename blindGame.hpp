@@ -22,6 +22,7 @@
 
 #include "player.hpp"
 #include "game.hpp"
+#include "point.hpp"
 
 using namespace std;
 
@@ -56,6 +57,9 @@ public:
     string getName();
     //setters
     void setCurrPlayers(int currPlayers);
+    bool isFinished(){
+        return false;
+    }
 };
 
 

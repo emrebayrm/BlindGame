@@ -30,7 +30,7 @@ public:
     int getCurrPlayers();
     string getName();
 
-    virtual string toString() = 0;
+    virtual string toString();
     
     //adds the player to the game. Returns playerId
     virtual int join(string playerName) = 0;
