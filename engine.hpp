@@ -43,7 +43,7 @@ public:
 
     bool joinGame(GameJoinCommand_t command);
 
-    virtual Game *createGame(GameCreateCommand_t command) = 0;
+    virtual Game *createGame(GameCreateCommand_t createPacket, GameJoinCommand_t joinPacket) = 0;
 
     bool observeGame(GameObserveCommand_t observeData);
 

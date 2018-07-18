@@ -20,27 +20,18 @@ Command * BlindGameServerEngine::doHandshake() {
 }
 
 //TODO: implement dummy game
-Game *BlindGameServerEngine::createGame(GameCreateCommand_t command) {
+Game *BlindGameServerEngine::createGame(GameCreateCommand_t createPacket, GameJoinCommand_t joinPacket) {
     Game *game;
-    Command *join_cmd;
-    GameJoinCommand_t *joinPacket;
-    cout << "requested options are : " << command.maxPlayer << " : " <<
-         command.gameName << " : " << endl;
-    game = new BlindGame(generateUniqueId(), command.maxPlayer, command.gameName);
 
-    // getSenderTopicName
-    // send
-    // getReceiverTopicName
-    // send
+    cout << "requested options are : " << createPacket.maxPlayer << " : " <<
+         createPacket.gameName << " : " << endl;
+    game = new BlindGame(generateUniqueId(), createPacket.maxPlayer, createPacket.gameName);
 
     startGameIntoThread(game);
     insertNewGame(game);
-    join_cmd = static_cast<Command *>(malloc(sizeof(Command) + sizeof(GameJoinCommand_t)));
-    joinPacket = reinterpret_cast<GameJoinCommand_t *>(join_cmd->context);
 
-    networkModule->recvData(join_cmd,sizeof(Command) + sizeof(GameJoinCommand_t));
-
-    joinGame(*joinPacket);
+    joinPacket.gameId = game->getId();
+    joinGame(joinPacket);
 
     return game;
 }

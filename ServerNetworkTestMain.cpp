@@ -1,5 +1,5 @@
 #include <iostream>
-#include "networkModule.hpp"
+#include "NetworkModule.hpp"
 #include <cstdlib>
 #include <unistd.h>
 #include <cstring>

@@ -7,10 +7,12 @@
 int DummyGame::join(string playerName) {
     if(currPlayers == maxPlayer)
         return -1;
-    uid++;
-    DummyPlayer *player = new DummyPlayer(uid,playerName);
-    pushPlayer(player);
-    return player->getId();
+    int playerId;
+    playerId = findPlayerId();
+    Player *player = new DummyPlayer(playerId, playerName);
+    getPlayers()[playerId] = player;
+    currPlayers++;
+    return playerId;
 }
 
 bool DummyGame::isFinished() {

@@ -5,10 +5,11 @@
 #ifndef BLINDGAME_NETWORKMODULE_H
 #define BLINDGAME_NETWORKMODULE_H
 
+#include <unistd.h>
 #define MAX_PAYLOAD 200
 
 
-class networkModule{
+class NetworkModule{
 private:
     int fd=-1;
     int port;
@@ -22,7 +23,7 @@ public:
 
 };
 
-class ServerNetworkModule : public networkModule{
+class ServerNetworkModule : public NetworkModule{
 private:
     int currentClientFd=-1;
 public:
@@ -34,7 +35,7 @@ public:
 
 };
 
-class ClientNetworkModule : public networkModule{
+class ClientNetworkModule : public NetworkModule{
 private:
     int fd=-1;
 public:
@@ -42,6 +43,9 @@ public:
     int sendData(void *buf, int size);
     int recvData(void *buf, int size);
     void setFd(int _fd){ fd=_fd;}
+    void closeConnection(){
+        close(getFd());
+    }
 };
 
 

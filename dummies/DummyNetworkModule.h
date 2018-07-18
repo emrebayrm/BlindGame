@@ -5,7 +5,7 @@
 #ifndef BLINDGAME_DUMMYNETWORKMODULE_H
 #define BLINDGAME_DUMMYNETWORKMODULE_H
 
-#include "../networkModule.hpp"
+#include "../NetworkModule.hpp"
 #include "../packets.hpp"
 #include <iostream>
 #include <cstring>
@@ -53,7 +53,7 @@ public:
             cin >> createCommand->gameName;
             command->commandType = CREATE;
             command->length = sizeof(GameCreateCommand_t);
-            command->context = createCommand;
+            //command->context = createCommand;
         }
         if(type == 1){
             GameJoinCommand_t *joinCommand = new GameJoinCommand_t;

@@ -20,27 +20,20 @@ Command * DummyGameServerEngine::doHandshake() {
     return command;
 }
 
-Game *DummyGameServerEngine::createGame(GameCreateCommand_t command) {
+Game *DummyGameServerEngine::createGame(GameCreateCommand_t createPacket, GameJoinCommand_t joinPacket) {
     Game *game;
-    Command *join_cmd;
-    GameJoinCommand_t *joinPacket;
-    cout << "requested options are : " << command.maxPlayer << " : " <<
-         command.gameName << " : " << endl;
-    game = new DummyGame(generateUniqueId(), command.maxPlayer, command.gameName);
+    cout << "requested options are : " << createPacket.maxPlayer << " : " <<
+         createPacket.gameName << " : " << endl;
 
-    // getSenderTopicName
-    // send
-    // getReceiverTopicName
-    // send
+    game = new DummyGame(generateUniqueId(), createPacket.maxPlayer, createPacket.gameName);
 
     startGameIntoThread(game);
     insertNewGame(game);
-    join_cmd = static_cast<Command *>(malloc(sizeof(Command) + sizeof(GameJoinCommand_t)));
-    joinPacket = reinterpret_cast<GameJoinCommand_t *>(join_cmd->context);
 
-    networkModule->recvData(join_cmd,sizeof(Command) + sizeof(GameJoinCommand_t));
-
-//    joinGame(*joinPacket);
+    joinGame(joinPacket);
 
     return game;
 }
+
+
+//list game last -1
