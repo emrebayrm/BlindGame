@@ -23,8 +23,8 @@ int main(void) {
     int playerId,dir;
     
     
-    
-    while(!game->isFinished()) {
+    int win;
+    while((win = game->isFinished()) == -1) {
         cout << "coinLocation: x: " << game->getCoinLocation()->getX() << " y: " << game->getCoinLocation()->getY() << endl;
         vector<pair<int,int>> dists = game->getCoinDistances();
         cout << endl << "***distances***" << endl;
@@ -44,5 +44,6 @@ int main(void) {
         game->movePlayer(dir, playerId);
         
     }
+    cout << win << " playerId Wins!!!!!!!" << endl;
     return 0;
 }

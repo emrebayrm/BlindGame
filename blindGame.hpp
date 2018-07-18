@@ -55,7 +55,7 @@ public:
     bool isValidMovement(int dir, Point *p);
     bool movePlayer(int dir, int playerId);
     void resetMoves();
-    bool isFinished();
+    int isFinished();
     void startGame();
     bool isTurnFinished();
     

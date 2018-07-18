@@ -40,7 +40,7 @@ public:
     virtual int join(string playerName) = 0;
     
     //returns true if the game is finished, false otherwise
-    virtual bool isFinished() = 0;
+    virtual int isFinished() = 0;
     
     virtual void startGame() = 0;
 
