@@ -34,7 +34,6 @@ public:
     int getCurrPlayers();
     string getName();
     Player* getPlayer(int playerId);
-
     virtual string toString();
     
     //adds the player to the game. Returns playerId

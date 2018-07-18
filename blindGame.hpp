@@ -55,6 +55,10 @@ public:
     bool isValidMovement(int dir, Point *p);
     bool movePlayer(int dir, int playerId);
     void resetMoves();
+    bool isFinished();
+    void startGame();
+    bool isTurnFinished();
+    
     //getters
     int getMaxPlayer();
     int getCurrPlayers();
@@ -63,9 +67,7 @@ public:
     string getName();
     //setters
     void setCurrPlayers(int currPlayers);
-    bool isFinished();
-    void startGame();
-    bool isTurnFinished();
+    
 };
 
 
