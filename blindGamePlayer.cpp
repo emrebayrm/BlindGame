@@ -13,10 +13,12 @@ BlindGamePlayer::BlindGamePlayer(int id, string name) : Player(id, name) {
     resetCurrMove();
 }
 
-BlindGamePlayer::BlindGamePlayer(){}
-
 bool BlindGamePlayer::isDone() {
-    return currMove == maxMove;
+    return getCurrMove() == maxMove;
+}
+
+int BlindGamePlayer::getCurrMove() {
+    return currMove;
 }
 
 void BlindGamePlayer::incCurrMove() {
@@ -27,19 +29,12 @@ void BlindGamePlayer::resetCurrMove() {
     currMove = 0;
 }
 
-bool BlindGamePlayer::move(int dir, BlindGame *game) {
-    if(isDone())
-        return false;
-    if(game->isValidMovement(dir, location)) {
-        location->go(dir);
-        incCurrMove();
-        return true;
-    }
-    return false;
-}
-
 Point* BlindGamePlayer::getLocation() {
     return location;
+}
+
+void BlindGamePlayer::setLocation(Point *location) {
+    this->location = location;
 }
 
 string BlindGamePlayer::toString() {

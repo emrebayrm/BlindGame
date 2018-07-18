@@ -13,21 +13,21 @@
 #include "point.hpp"
 #include "blindGame.hpp"
 
-#define MAX_MOVES 3
+#define MAX_MOVES 1
 
 class BlindGame;
 
 class BlindGamePlayer : public Player {
-protected:
-    Point *location;
-    static const int maxMove = MAX_MOVES;
+private:
+    Point* location;
     int currMove;
 public:
-    BlindGamePlayer();
+    static const int maxMove = MAX_MOVES;
     BlindGamePlayer(int id, string name);
     Point* getLocation();
+    void setLocation(Point *location);
     string toString();
-    
+    int getCurrMove();
     //increments currMove by 1.
     void incCurrMove();
     
@@ -37,8 +37,6 @@ public:
     //returns true if the player finished her turn.
     bool isDone();
     
-    //moves the player in the given direction. Returns true if the player can move, false otherwise
-    bool move(int dir, BlindGame* game);
 };
 
 #endif /* blindGamePlayer_hpp */

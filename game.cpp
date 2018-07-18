@@ -19,7 +19,7 @@ Game::Game(int id, int maxPlayer, string name) {
     players.resize(maxPlayer);
 }
 
-Player* Game::getPlater(int playerId) {
+Player* Game::getPlayer(int playerId) {
     return players[playerId];
 }
 
