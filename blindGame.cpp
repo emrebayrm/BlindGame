@@ -148,13 +148,13 @@ void BlindGame::moveCoin(int dir) {
         coinLocation->go(LEFT);
 }
 
-bool BlindGame::isFinished() {
+int BlindGame::isFinished() {
     for(int i = 0; i < getPlayers().size(); ++i) {
         BlindGamePlayer *p = (BlindGamePlayer*) getPlayers()[i];
         if(p->getLocation()->getX() == coinLocation->getX() && p->getLocation()->getY() == coinLocation->getY())
-            return true;
+            return p->getId();
     }
-    return false;
+    return -1;
 }
 
 Point* BlindGame::getRandomCoinPoint() {

@@ -44,10 +44,6 @@ void Point::go(int dir) {
     }
 }
 
-bool Point::operator==(const Point &p) {
-    return (x == p.x && y == p.y);
-}
-
 //getters
 int Point::getX() {
     return this->x;
