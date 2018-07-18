@@ -11,15 +11,21 @@ using namespace std;
 
 int main(){
     
-    mqttPublisher *pub = new mqttPublisher("topic", "192.168.2.236", "124123");
+    mqttPublisher *pub = new mqttPublisher("topic", "127.0.0.1", "1");
     pub->init();
     pub->publish("asdkasdoa");
     
-    mqttSubscriber *sub = new mqttSubscriber("topic", "192.168.2.236", "1324312");
-    sub->init();
-    char buf[10];
-    sub->receive(buf);
+    mqttSubscriber *sub = new mqttSubscriber("topic", "127.0.0.1", "2");
     
-    cout << buf << endl;
-
+    int sub_i=sub->init();
+    //cout << sub_i << endl;
+    void *buf;
+    buf=malloc(sizeof(10));
+    cout << "buf" << endl;
+    //sub->receive(buf);
+    cout << "1234" << endl;
+    //cout << buf << endl;
+    int a;
+    cin >> a;
+    
 }

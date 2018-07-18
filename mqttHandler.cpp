@@ -5,6 +5,7 @@
 #include <MQTTClient.h>
 #include <cstring>
 #include "mqttHandler.h"
+#include <iostream>
 
 mqttPublisher::mqttPublisher(const string &_topic, const string &_address, const string & _clientId) :
         mqttHandler(_topic, _address, _clientId) {}
@@ -49,47 +50,19 @@ mqttSubscriber::mqttSubscriber(const string &_topic, const string &_address, con
         mqttHandler(_topic, _address, _clientId) {}
 
 int mqttSubscriber::init() {
-    MQTTClient_connectOptions conn_opts = MQTTClient_connectOptions_initializer;
-    int rc;
-
-    MQTTClient_create(&this->mqttClient,getTopic().c_str() , getClientId().c_str(),
-                      MQTTCLIENT_PERSISTENCE_NONE, NULL);
-
-
-    conn_opts.keepAliveInterval = 20;
-    conn_opts.cleansession = 1;
-    if ((rc = MQTTClient_connect(this->mqttClient, &conn_opts)) != MQTTCLIENT_SUCCESS)
-    {
-        printf("Failed to connect, return code %d\n", rc);
-        rc = -1;
+    broker = mqtt_connect(getClientId().c_str(), getAddress().c_str(), 1883);
+    int result = mqtt_subscribe(broker, getTopic().c_str(), QoS1);
+    
+    if(result != 1) {
+        puts("failed to Subscribe");
+        exit(1);
     }
-
-    if( (rc =  MQTTClient_subscribe(this->mqttClient,getTopic().c_str(),QOS)) != MQTTCLIENT_SUCCESS)
-    {
-        printf("Failed to subscribe, return code %d\n",rc);
-        rc = -1;
-    }
-
-    return rc;
+    void mqtt_display_message(mqtt_broker_handle_t *broker, int (*print)(int));
+    mqtt_display_message(broker,&this->receive);
+    return result;
 }
 
-int mqttSubscriber::receive(void *message) {
-    MQTTClient_message *_message;
-    int lenTopic,rc;
-    lenTopic = 30;
-    int i = 0;
-
-    char *topic = static_cast<char *>(malloc(sizeof(char) * 30));
-
-        if ((rc = MQTTClient_receive(this->mqttClient, &topic, &lenTopic, &_message, TIMEOUT)) != MQTTCLIENT_SUCCESS) {
-            perror("Failed ");
-            exit(-1);
-        }
-        if(message != NULL) {
-            memcpy(message,_message->payload,_message->payloadlen);
-        }
-        else{
-            printf("No message Received \n");
-        }
-
+int mqttSubscriber::receive(int message) {
+  putchar(message);
+   return 1;
 }
