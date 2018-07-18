@@ -8,15 +8,23 @@
 #include <string>
 #include <vector>
 #include <set>
+#include <iostream>
 
 using namespace std;
 
 Game::Game(int id, int maxPlayer, string name) {
+    printf("%s(%d)\n", __func__, __LINE__);
     this->id = id;
+    printf("%s(%d)\n", __func__, __LINE__);
     this->maxPlayer = maxPlayer;
+    printf("%s(%d)\n", __func__, __LINE__);
     this->name = name;
+    printf("%s(%d)\n", __func__, __LINE__);
     this->currPlayers = 0;
+    printf("%s(%d)\n", __func__, __LINE__);
     players.resize(maxPlayer);
+    printf("%s(%d)\n", __func__, __LINE__);
+
 }
 
 Player* Game::getPlayer(int playerId) {

@@ -11,8 +11,10 @@
 
 class BlindGameServerEngine : public GameServerEngine {
 public:
-    Command * doHandshake();
-    Game *createGame(GameCreateCommand_t createPacket, GameJoinCommand_t joinPacket);
+    Command * doHandshake() override ;
+    Game *createGame(GameCreateCommand_t createPacket, GameJoinCommand_t joinPacket) override ;
+
+    bool startGameIntoThread(Game *game);
 };
 
 

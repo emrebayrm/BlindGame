@@ -10,6 +10,7 @@
 //TODO: debug level
 bool GameServerEngine::startServer(int debug) {
     this->debug = debug;
+    cout << "Server Started " << endl;
     while (1) {
         Command *command;
 
@@ -17,14 +18,19 @@ bool GameServerEngine::startServer(int debug) {
         cout << "Client Connected" <<endl;
         command = doHandshake();
         cout << "Handshake completed" <<endl;
+
         if (command->commandType == CREATE) {
             cout << "Create" << endl;
-
+            int ret = 0;
             GameCreateCommand_t *createCommand;
-            createCommand = reinterpret_cast<GameCreateCommand_t *>(command->context);
+            createCommand = new GameCreateCommand_t;
+            ret += networkModule->recvData(createCommand,sizeof(GameCreateCommand_t));
             GameJoinCommand_t *joinCommand;
-            joinCommand = reinterpret_cast<GameJoinCommand_t *>(command->context + sizeof(GameCreateCommand_t));
-
+            joinCommand = new GameJoinCommand_t;
+            ret += networkModule->recvData(joinCommand, sizeof(GameJoinCommand_t));
+            if(ret != command->length){
+                cout << "Something Wrong in Create" << endl;
+            }
             createGame(*createCommand, *joinCommand);
 
         } else if (command->commandType == JOIN) {
@@ -52,12 +58,12 @@ bool GameServerEngine::listGames() {
     buffer->commandType = DATA;
     for (int i = 0; i < gamelist.size(); ++i) {
 
-        buffer->length = gamelist[i]->toString().size();
+        buffer->length = gamelist[i]->toString().size() + sizeof(Command);
 
         dataCommand = reinterpret_cast<GameDataCommand_t *>(buffer->context);
 
         sprintf(dataCommand->data,"%s",gamelist[i]->toString().c_str());
-
+        cout << "Server sended length " << buffer->length << endl;
         networkModule->sendData(buffer, buffer->length);
     }
 
@@ -118,6 +124,7 @@ bool GameServerEngine::observeGame(GameObserveCommand_t observeData) {
 
 bool GameServerEngine::startGameIntoThread(Game *game) {
     cout << "Game Object Starting "  <<  endl;
+
     return true;
 }
 

@@ -7,7 +7,6 @@
 
 #include <string>
 #include <MQTTClient.h>
-#include "mqtt.h"
 
 #define QOS         1
 #define TIMEOUT     10000L
@@ -66,14 +65,13 @@ public:
 
 class mqttSubscriber : public mqttHandler{
 private:
+    MQTTClient_connectOptions conn_opts;
     MQTTClient mqttClient;
-    mqtt_broker_handle_t *broker;
 public:
     mqttSubscriber(const string &_topic, const string &_address, const string & _clientId);
 
     int init() override ;
-    int static receive(int message);
-    void dis(){mqtt_display_message(broker,&this->receive);}
+    int receive(void *message);
 };
 
 

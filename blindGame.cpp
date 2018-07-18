@@ -175,6 +175,16 @@ void BlindGame::placePlayers() {
 }
 
 void BlindGame::startGame() {
+    string pubid;
+    pubid.append("serverP");
+    pubid.append(to_string(getId()));
+
+    string subid;
+    subid.append("serverS");
+    subid.append(to_string(getId()));
+
+    distanceSender = new mqttPublisher(distanceTopic,address,pubid);
+    positionCollecter = new mqttSubscriber(positionTopic,address,subid);
     placePlayers();
     placeCoin();
 }

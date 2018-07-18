@@ -35,6 +35,7 @@ public:
         Command *temp;
         temp = static_cast<Command *>(buf);
         *temp = *command;
+
         return 0;
     }
 
@@ -46,13 +47,26 @@ public:
              << "2 : observe " <<endl;
         cin >> type;
         if(type == 0){
-            GameCreateCommand_t *createCommand = new GameCreateCommand_t;
-            cout << "Enter Max Player  : ";
-            cin >> createCommand->maxPlayer;
-            cout << "Enter Game Name :";
-            cin >> createCommand->gameName;
+            GameCreateCommand_t *createPacket;
+
+            GameJoinCommand_t *joinPacket;
+
+            command = static_cast<Command *>(malloc(sizeof(Command) + sizeof(GameCreateCommand_t) + sizeof(GameJoinCommand_t)));
+
             command->commandType = CREATE;
-            command->length = sizeof(GameCreateCommand_t);
+            command->length =sizeof(GameCreateCommand_t) + sizeof(GameJoinCommand_t);
+
+            createPacket = reinterpret_cast<GameCreateCommand_t *>(command->context);
+            joinPacket = reinterpret_cast<GameJoinCommand_t *>(command->context + sizeof(GameCreateCommand_t));
+
+
+            cout << "Enter Max Player  : ";
+            cin >> createPacket->maxPlayer;
+            cout << "Enter Game Name :";
+            cin >> createPacket->gameName;
+
+            joinPacket->gameId = -1;
+            sprintf(joinPacket->playerName,"Mustafa");
             //command->context = createCommand;
         }
         if(type == 1){

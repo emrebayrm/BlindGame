@@ -2,7 +2,7 @@
 // Created by patates on 7/18/18.
 //
 
-#include "mqttHandler.h"
+#include "../mqttHandler.h"
 #include <string>
 
 #include <iostream>
@@ -10,14 +10,18 @@
 using namespace std;
 
 int main(){
-    
-    
-    mqttSubscriber *sub = new mqttSubscriber("topic", "127.0.0.1", "2");
-    
-    int sub_i=sub->init();
+    string topicName = "topic";
+    string address = "tcp://localhost:1883";
+    string clientId = "Client2";
+    mqttSubscriber *sub = new mqttSubscriber(topicName, address,clientId);
+
+    int sub_i;
+    sub_i=sub->init();
+    char *buffer;
+    buffer = static_cast<char *>(calloc(sizeof(char), 20));
     while(1){
-        sub->dis();
-       // cin >> sub_i;
+        sub->receive(buffer);
+        cout << buffer << endl;
     }
 
 }

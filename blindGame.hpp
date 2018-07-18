@@ -26,6 +26,7 @@
 #include "player.hpp"
 #include "game.hpp"
 #include "point.hpp"
+#include "mqttHandler.h"
 
 using namespace std;
 
@@ -47,7 +48,15 @@ private:
     void placeCoin();
     void placePlayers();
     Point* getRandomCoinPoint();
-    
+
+    mqttPublisher *distanceSender;
+    string distanceTopic;
+
+    mqttSubscriber *positionCollecter;
+    string positionTopic;
+
+    const string address;
+
 public:
     BlindGame(int id, int maxPlayer, string name);
     vector<pair<int, int>> getCoinDistances();
@@ -67,6 +76,10 @@ public:
     string getName();
     //setters
     void setCurrPlayers(int currPlayers);
+    void setTopicNames(string distT,string posT){
+        this->distanceTopic = distT;
+        this->positionTopic = posT;
+    }
     
 };
 
