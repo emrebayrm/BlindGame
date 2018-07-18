@@ -66,7 +66,7 @@ int main(int argc, char *argv[]){
     joinPacket->gameId = -1;
     sprintf(joinPacket->playerName,"Mustafa");
 
-    networkModule.sendData(joinComand,sizeof(Command) + sizeof(GameJoinCommand_t));
+    NetworkModule.sendData(joinComand,sizeof(Command) + sizeof(GameJoinCommand_t));
 */
 
     //Receive topic names
