@@ -1,5 +1,5 @@
 #include <iostream>
-#include "NetworkModule.h"
+#include "networkModule.hpp"
 #include <cstdlib>
 #include <unistd.h>
 #include <cstring>
@@ -16,12 +16,12 @@ memset(cmd_send, 0 ,PAYLOAD_MAX);
 memset(cmd_recv, 0 ,PAYLOAD_MAX);
 cmd_send->commandType = CREATE ;
 
-char ptr[8]="mustafa";
+char ptr[18]="mustafa can güden";
 //perror("...");
 
-memcpy(cmd_send->context, ptr ,8);
+memcpy(cmd_send->context, ptr ,18);
 
-cmd_send->length=sizeof(Command)+8;
+cmd_send->length=sizeof(Command)+18;
 network.init(5000);
 network.listenClient();
 //

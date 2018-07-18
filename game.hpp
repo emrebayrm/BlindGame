@@ -33,6 +33,7 @@ public:
     int getMaxPlayer();
     int getCurrPlayers();
     string getName();
+    Player* getPlayer(int playerId);
 
     virtual string toString();
     
@@ -41,6 +42,8 @@ public:
     
     //returns true if the game is finished, false otherwise
     virtual bool isFinished() = 0;
+    
+    virtual void startGame() = 0;
 
 };
 

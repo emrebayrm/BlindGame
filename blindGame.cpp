@@ -12,14 +12,23 @@
 #include <cstring>
 #include "blindGamePlayer.hpp"
 #include <time.h>
+#include "point.hpp"
+
+#include <iostream>
 
 using namespace std;
 
 BlindGame::BlindGame(int id, int maxPlayer, string name) : Game(id, maxPlayer, name) {
     this->mapRow = calculateMapRow(maxPlayer);
     this->mapCol = calculateMapCol(maxPlayer);
-    createMap(mapRow, mapCol);
     srand(time(NULL));
+}
+
+void BlindGame::resetMoves() {
+    for(int i = 0; i < players.size(); ++i) {
+        BlindGamePlayer *player = (BlindGamePlayer*) players[i];
+        player->resetCurrMove();
+    }
 }
 
 int BlindGame::join(string playerName) {
@@ -28,27 +37,17 @@ int BlindGame::join(string playerName) {
     int playerId;
     playerId = findPlayerId();
     Player *player = new BlindGamePlayer(playerId, playerName);
-    getPlayers()[playerId] = player;
-    setCurrPlayers(getCurrPlayers() + 1);
+    players[playerId] = player;
+    ++currPlayers;
     return playerId;
 }
 
 int BlindGame::calculateMapRow(int maxPlayer) {
-    return 10 + (maxPlayer - 2) * 2;
+    return 11 + (maxPlayer - 2) * 2;
 }
 
 int BlindGame::calculateMapCol(int maxPlayer) {
-    return 10 + (maxPlayer - 2) * 2;
-}
-
-char** BlindGame::createMap(int mapRow, int mapCol) {
-    char **map = (char**) malloc(sizeof(char*) * mapRow);
-    for(int i = 0; i < mapRow; ++i)
-        map[i] = (char*) malloc(sizeof(char) * mapCol);
-    for(int i = 0; i < mapRow; ++i) {
-        memset(map[i], 'Y', mapCol);
-    }
-    return map;
+    return 11 + (maxPlayer - 2) * 2;
 }
 
 int BlindGame::findPlayerId() {
@@ -65,6 +64,31 @@ int BlindGame::findPlayerId() {
     return playerId;
 }
 
+bool BlindGame::movePlayer(int dir, int playerId) {
+    BlindGamePlayer *player = (BlindGamePlayer*) players[playerId];
+        if(player->isDone())
+            return false;
+        if(isValidMovement(dir, player->getLocation())) {
+            player->getLocation()->go(dir);
+            player->incCurrMove();
+            if(isTurnFinished()) {
+                playCoin(2);
+            }
+            return true;
+        }
+        return false;
+}
+
+bool BlindGame::isTurnFinished() {
+    for(int i = 0; i < currPlayers; ++i) {
+        BlindGamePlayer *player = (BlindGamePlayer*) players[i];
+        if(player->getCurrMove() != player->maxMove)
+            return false;
+    }
+    resetMoves();
+    return true;
+}
+
 
 bool BlindGame::checkBounds(Point *p) {
     if(p->getX() < 0 || p->getY() < 0 || p->getX() >= mapRow || p->getY() >= mapCol)
@@ -74,8 +98,6 @@ bool BlindGame::checkBounds(Point *p) {
 
 bool BlindGame::isValidPoint(Point *p) {
     if(!checkBounds(p))
-        return false;
-    if(map[p->getX()][p->getY()] == OBSTICLE)
         return false;
     return true;
 }
@@ -132,13 +154,44 @@ bool BlindGame::isFinished() {
         if(p->getLocation()->getX() == coinLocation->getX() && p->getLocation()->getY() == coinLocation->getY())
             return true;
     }
-    return true;
+    return false;
+}
+
+Point* BlindGame::getRandomCoinPoint() {
+    int row = rand() % mapRow;
+    int col = rand() % mapCol;
+
+    return new Point(row, col);
+}
+
+void BlindGame::placeCoin() {
+    coinLocation = getRandomCoinPoint();
+}
+
+void BlindGame::placePlayers() {
+    for(int i = 0; i < currPlayers; ++i) {
+        ((BlindGamePlayer*)(players[i]))->setLocation(new Point(mapRow / 2, mapCol / 2));
+    }
+}
+
+void BlindGame::startGame() {
+    placePlayers();
+    placeCoin();
+}
+
+vector<pair<int,int>> BlindGame::getCoinDistances() {
+    vector<pair<int,int>> dists;
+    for(int i = 0; i < players.size(); ++i) {
+        BlindGamePlayer *player = (BlindGamePlayer*) players[i];
+        pair<int, int> p;
+        p.first = player->getId();
+        p.second = player->getLocation()->distance(coinLocation);
+        dists.push_back(p);
+    }
+    return dists;
 }
 
 //getters
-char** BlindGame::getMap() {
-    return this->map;
-}
 int BlindGame::getMaxPlayer() {
     return this->maxPlayer;
 }

@@ -19,8 +19,6 @@
 #define DOWN 2
 #define LEFT 3
 
-#include <stdio.h>
-
 #include <string>
 #include <vector>
 #include <set>
@@ -33,29 +31,31 @@ using namespace std;
 
 class BlindGame : public Game {
 private:
-    char **map;
     int mapRow;
     int mapCol;
     Point *coinLocation;
     
     int calculateMapRow(int maxPlayer);
     int calculateMapCol(int maxPlayer);
-    char **createMap(int mapRow, int mapCol);
     int findPlayerId();
     bool checkBounds(Point *p);
     bool isValidPoint(Point *p);
     void moveCoin(int dir);
     
     vector<int> getCoinDirections();
-    void playCoin(int dir);
+    void playCoin(int moveC);
+    void placeCoin();
+    void placePlayers();
+    Point* getRandomCoinPoint();
     
 public:
     BlindGame(int id, int maxPlayer, string name);
     vector<pair<int, int>> getCoinDistances();
     int join(string playerName);    
     bool isValidMovement(int dir, Point *p);
+    bool movePlayer(int dir, int playerId);
+    void resetMoves();
     //getters
-    char** getMap();
     int getMaxPlayer();
     int getCurrPlayers();
     Point* getCoinLocation();
@@ -64,6 +64,8 @@ public:
     //setters
     void setCurrPlayers(int currPlayers);
     bool isFinished();
+    void startGame();
+    bool isTurnFinished();
 };
 
 

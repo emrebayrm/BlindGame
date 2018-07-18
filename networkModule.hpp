@@ -9,7 +9,7 @@
 #define MAX_PAYLOAD 200
 
 
-class NetworkModule{
+class networkModule{
 private:
     int fd=-1;
     int port;
@@ -23,7 +23,7 @@ public:
 
 };
 
-class ServerNetworkModule : public NetworkModule{
+class ServerNetworkModule : public networkModule{
 private:
     int currentClientFd=-1;
 public:
@@ -35,7 +35,7 @@ public:
 
 };
 
-class ClientNetworkModule : public NetworkModule{
+class ClientNetworkModule : public networkModule{
 private:
     int fd=-1;
 public:

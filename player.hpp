@@ -18,7 +18,6 @@ protected:
     int id;
     string name;
 public:
-    Player();
     Player(int id, string name);
     int getId();
     string getName();
