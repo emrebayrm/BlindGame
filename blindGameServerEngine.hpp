@@ -12,7 +12,7 @@
 class BlindGameServerEngine : public GameServerEngine {
 public:
     Command * doHandshake();
-    Game *createGame(GameCreateCommand_t command);
+    Game *createGame(GameCreateCommand_t createPacket, GameJoinCommand_t joinPacket);
 };
 
 

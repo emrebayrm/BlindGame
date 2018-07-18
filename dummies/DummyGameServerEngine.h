@@ -17,7 +17,7 @@ public:
 
     Command *doHandshake() override;
 
-    Game *createGame(GameCreateCommand_t command) override;
+    Game *createGame(GameCreateCommand_t createPacket, GameJoinCommand_t joinPacket) override;
 
 };
 

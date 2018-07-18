@@ -5,6 +5,7 @@
 #ifndef BLINDGAME_NETWORKMODULE_H
 #define BLINDGAME_NETWORKMODULE_H
 
+#include <unistd.h>
 #define MAX_PAYLOAD 200
 
 
@@ -42,6 +43,9 @@ public:
     int sendData(void *buf, int size);
     int recvData(void *buf, int size);
     void setFd(int _fd){ fd=_fd;}
+    void closeConnection(){
+        close(getFd());
+    }
 };
 
 
