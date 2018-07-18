@@ -15,8 +15,9 @@ public:
 
     int join(string playerName) override;
 
-    bool isFinished() override;
+    int isFinished() override;
 
+    void startGame() override;
 };
 
 class DummyPlayer : public Player{

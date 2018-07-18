@@ -15,11 +15,16 @@ int DummyGame::join(string playerName) {
     return playerId;
 }
 
-bool DummyGame::isFinished() {
-    return false;
-}
 
 DummyGame::DummyGame(int id, int maxPlayer, const string &name) : Game(id, maxPlayer, name) {
+
+}
+
+int DummyGame::isFinished() {
+    return 0;
+}
+
+void DummyGame::startGame() {
 
 }
 

@@ -60,7 +60,12 @@ int ServerNetworkModule::sendData(void *buf, int size) {
 	printf("Send Error!");
     	return 0;
 	}
-    return send(currentClientFd,buf,size,0);
+
+    int readed = 0;
+    while ( readed < size) {
+        readed += send(currentClientFd, buf+readed, size-readed, 0);
+    }
+    return readed;
 }
 
 int ServerNetworkModule::recvData(void *buf, int size) {
@@ -68,7 +73,11 @@ int ServerNetworkModule::recvData(void *buf, int size) {
 	printf("Receive Error!");
     	return 0;
 	}
-    return recv(currentClientFd,buf,size,0);
+	int readed = 0;
+	while ( readed < size) {
+        readed += recv(currentClientFd, buf+readed, size-readed, 0);
+	}
+    return readed;
 }
 
 void ServerNetworkModule::listenClient() {
@@ -111,7 +120,11 @@ int ClientNetworkModule::sendData(void *buf, int size) {
 		printf("Send Error!");
     	return -1;
 	}
-    return send(fd,buf,size,0);
+    int readed = 0;
+    while ( readed < size) {
+        readed += send(fd, buf+readed, size-readed, 0);
+    }
+    return readed;
 }
 
 
@@ -121,5 +134,12 @@ int ClientNetworkModule::recvData(void *buf, int size) {
 		printf("Receive Error!");
     	return -1;
 	}
-    return recv(fd,buf,size,0);
+    int readed = 0;
+    while ( readed < size) {
+        readed += recv(fd, buf+readed, size-readed, 0);
+        if(readed <= 0)
+            perror("asd");
+
+    }
+    return readed;
 }

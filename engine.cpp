@@ -12,11 +12,11 @@ bool GameServerEngine::startServer(int debug) {
     this->debug = debug;
     while (1) {
         Command *command;
-        if(debug == 1)
-            listGames();
-        ((ServerNetworkModule *) networkModule)->listenClient();
-        command = doHandshake();
 
+        ((ServerNetworkModule *) networkModule)->listenClient();
+        cout << "Client Connected" <<endl;
+        command = doHandshake();
+        cout << "Handshake completed" <<endl;
         if (command->commandType == CREATE) {
             cout << "Create" << endl;
 

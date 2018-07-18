@@ -5,7 +5,7 @@
 #ifndef BLINDGAME_DUMMYNETWORKMODULE_H
 #define BLINDGAME_DUMMYNETWORKMODULE_H
 
-#include "../NetworkModule.hpp"
+#include "../networkModule.hpp"
 #include "../packets.hpp"
 #include <iostream>
 #include <cstring>
