@@ -26,14 +26,25 @@ typedef enum {CREATE, JOIN, OBSERVE,DATA} command_type;
 struct Command{
     command_type commandType;
     int length;
-    char context[0];
+    void* context;
 };
 
 //TODO: all operations commad_t
 typedef struct {
-    Command command;
     int maxPlayer;
+    char gameName[MAX_GAME_NAME];
+} GameCreateCommand_t;
+
+typedef struct {
     int gameId;
-    char name[MAX_GAME_NAME];
-} GameCommand_t;
+    char playerName[MAX_PLAYER_NAME];
+} GameJoinCommand_t;
+
+typedef struct {
+    int gameId;
+} GameObserveCommand_t;
+
+typedef struct {
+    char data[0];
+} GameDataCommand_t;
 #endif //BLINDGAME_PACKETS_H

@@ -4,30 +4,29 @@
 
 #include "DummyGameServerEngine.h"
 #include "DummyGame.h"
+#include "../packets.hpp"
 
-GameCommand_t *DummyGameServerEngine::doHandshake() {
-    GameCommand_t *command = new GameCommand_t;
+Command * DummyGameServerEngine::doHandshake() {
+    Command *command = static_cast<Command *>(malloc(MAX_PAYLOAD));
     int ret;
 
     listGames();// sending game lists here
-    ret = networkModule->recvData(command, sizeof(command));
+    ret = networkModule->recvData(command, MAX_PAYLOAD);
 
-    if(ret != command->command.length){
+    if(ret != command->length){
         cout << "something wrong with received data";
     }
 
     return command;
 }
 
-Game *DummyGameServerEngine::createGame(GameCommand_t *command) {
+Game *DummyGameServerEngine::createGame(GameCreateCommand_t command) {
     Game *game;
-    GameCommand_t *blindGameCommand;
-    blindGameCommand = command;
-    GameCommand_t buffer;
-
-    cout << "requested options are : " << blindGameCommand->maxPlayer << " : " <<
-         blindGameCommand->name << " : " << endl;
-    game = new DummyGame(generateUniqueId(), blindGameCommand->maxPlayer, blindGameCommand->name);
+    Command *join_cmd;
+    GameJoinCommand_t *joinPacket;
+    cout << "requested options are : " << command.maxPlayer << " : " <<
+         command.gameName << " : " << endl;
+    game = new DummyGame(generateUniqueId(), command.maxPlayer, command.gameName);
 
     // getSenderTopicName
     // send
@@ -36,6 +35,12 @@ Game *DummyGameServerEngine::createGame(GameCommand_t *command) {
 
     startGameIntoThread(game);
     insertNewGame(game);
-    //networkModule->recvData(&buffer)
-    //joinGame(game->getId(),command->name);
+    join_cmd = static_cast<Command *>(malloc(sizeof(Command) + sizeof(GameJoinCommand_t)));
+    joinPacket = reinterpret_cast<GameJoinCommand_t *>(join_cmd->context);
+
+    networkModule->recvData(join_cmd,sizeof(Command) + sizeof(GameJoinCommand_t));
+
+//    joinGame(*joinPacket);
+
+    return game;
 }

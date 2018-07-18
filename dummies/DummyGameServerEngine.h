@@ -15,9 +15,9 @@ public:
         networkModule = new DummyNetworkModule();
     }
 
-    GameCommand_t *doHandshake() override;
+    Command *doHandshake() override;
 
-    Game *createGame(GameCommand_t *command) override;
+    Game *createGame(GameCreateCommand_t command) override;
 
 };
 

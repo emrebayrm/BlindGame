@@ -21,7 +21,7 @@ protected:
 private:
 
 public:
-    virtual GameCommand_t * doHandshake() = 0;
+    virtual Command * doHandshake() = 0;
 };
 
 
@@ -41,11 +41,11 @@ public:
     }
     bool listGames();
 
-    bool joinGame(int gameid, char *playerName);
+    bool joinGame(GameJoinCommand_t command);
 
-    virtual Game *createGame(GameCommand_t *command) = 0;
+    virtual Game *createGame(GameCreateCommand_t command) = 0;
 
-    bool observeGame(int gameid);
+    bool observeGame(GameObserveCommand_t observeData);
 
     bool startGameIntoThread(Game *game);
 
