@@ -97,6 +97,10 @@ bool BlindGame::isValidMovement(int dir, Point *p) {
     return true;
 }
 
+Player* BlindGame::getPlayer(int id) {
+    return getPlayers()[id];
+}
+
 vector<int> BlindGame::getCoinDirections() {
     vector<int> dirs;
     for(int i = 0; i < 4; ++i)

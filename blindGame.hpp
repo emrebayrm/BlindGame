@@ -64,6 +64,7 @@ public:
     //setters
     void setCurrPlayers(int currPlayers);
     bool isFinished();
+    Player* getPlayer(int id);
 };
 
 
