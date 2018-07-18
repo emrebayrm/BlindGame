@@ -1,5 +1,5 @@
 #include <iostream>
-#include "NetworkModule.h"
+#include "networkModule.hpp"
 #include <cstdlib>
 #include <unistd.h>
 #include <cstring>
@@ -15,8 +15,8 @@ main(){
 	memset(cmd_send, 0 ,PAYLOAD_MAX);
 	memset(cmd_recv, 0 ,PAYLOAD_MAX);
 	cmd_send->commandType = JOIN ;
-	memcpy(cmd_send->context, "Oguz" ,5);
-	cmd_send->length=sizeof(Command)+5;
+	memcpy(cmd_send->context, "Oguz C" ,7);
+	cmd_send->length=sizeof(Command)+7;
 	network.init(5000);
 	sent_data_size=network.sendData(cmd_send,cmd_send->length);
 	recv_data_size=network.recvData(cmd_recv,PAYLOAD_MAX);
