@@ -13,7 +13,7 @@
 #include "point.hpp"
 #include "blindGame.hpp"
 
-#define MAX_MOVES 1
+#define MAX_MOVES 3
 
 class BlindGame;
 
