@@ -9,8 +9,6 @@
 #ifndef player_hpp
 #define player_hpp
 
-#include <stdio.h>
-
 #include <string>
 
 using namespace std;
@@ -20,6 +18,7 @@ protected:
     int id;
     string name;
 public:
+    Player();
     Player(int id, string name);
     int getId();
     string getName();

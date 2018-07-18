@@ -11,14 +11,15 @@
 #include <string>
 #include <cstring>
 #include "blindGamePlayer.hpp"
+#include <time.h>
 
 using namespace std;
 
 BlindGame::BlindGame(int id, int maxPlayer, string name) : Game(id, maxPlayer, name) {
     this->mapRow = calculateMapRow(maxPlayer);
     this->mapCol = calculateMapCol(maxPlayer);
-    this->coinLocation = NULL;
     createMap(mapRow, mapCol);
+    srand(time(NULL));
 }
 
 int BlindGame::join(string playerName) {
@@ -28,6 +29,7 @@ int BlindGame::join(string playerName) {
     playerId = findPlayerId();
     Player *player = new BlindGamePlayer(playerId, playerName);
     getPlayers()[playerId] = player;
+    setCurrPlayers(getCurrPlayers() + 1);
     return playerId;
 }
 
@@ -95,23 +97,42 @@ bool BlindGame::isValidMovement(int dir, Point *p) {
     return true;
 }
 
-bool* BlindGame::getCoinDirections() {
-    bool* dirs = (bool*) malloc(sizeof(bool) * 4);
-    memset(dirs, false, 4);
-    
-    if(isValidMovement(UP, coinLocation))
-        dirs[UP] = true;
-    if(isValidMovement(RIGHT, coinLocation))
-        dirs[RIGHT] = true;
-    if(isValidMovement(DOWN, coinLocation))
-        dirs[DOWN] = true;
-    if(isValidMovement(LEFT, coinLocation))
-        dirs[LEFT] = true;
+vector<int> BlindGame::getCoinDirections() {
+    vector<int> dirs;
+    for(int i = 0; i < 4; ++i)
+        if(isValidMovement(i, coinLocation))
+            dirs.push_back(i);
     return dirs;
 }
 
-void BlindGame::playCoin() {
-    
+void BlindGame::playCoin(int moveC) {
+    for(int i = 0; i < moveC; ++i) {
+        vector<int> dirs = getCoinDirections();
+        if(dirs.size() == 0)
+            return;
+        int dir = rand() % dirs.size();
+        moveCoin(dir);
+    }
+}
+
+void BlindGame::moveCoin(int dir) {
+    if(dir == UP)
+        coinLocation->go(UP);
+    else if(dir == RIGHT)
+        coinLocation->go(RIGHT);
+    else if(dir == DOWN)
+        coinLocation->go(DOWN);
+    else if(dir == LEFT)
+        coinLocation->go(LEFT);
+}
+
+bool BlindGame::isFinished() {
+    for(int i = 0; i < getPlayers().size(); ++i) {
+        BlindGamePlayer *p = (BlindGamePlayer*) getPlayers()[i];
+        if(p->getLocation()->getX() == coinLocation->getX() && p->getLocation()->getY() == coinLocation->getY())
+            return true;
+    }
+    return true;
 }
 
 //getters
@@ -125,7 +146,7 @@ int BlindGame::getCurrPlayers() {
     return this->currPlayers;
 }
 Point* BlindGame::getCoinLocation() {
-    return this->coinLocation;
+    return coinLocation;
 }
 
 int BlindGame::getId() {

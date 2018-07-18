@@ -29,7 +29,8 @@ public:
     void init(int port);
     int sendData(void *buf, int size);
     int recvData(void *buf, int size);
-    void listenClient();
+
+    virtual void listenClient();
 
 };
 

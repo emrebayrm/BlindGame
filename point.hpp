@@ -9,8 +9,6 @@
 #ifndef point_hpp
 #define point_hpp
 
-#include <stdio.h>
-
 class Point {
 private:
     int x;
@@ -22,6 +20,7 @@ private:
 public:
     Point(int x, int y);
     
+    bool operator==(const Point &p);
     int distance(Point *p);
     void go(int dir);
     //gettters

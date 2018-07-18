@@ -44,9 +44,10 @@ private:
     int findPlayerId();
     bool checkBounds(Point *p);
     bool isValidPoint(Point *p);
+    void moveCoin(int dir);
     
-    bool* getCoinDirections();
-    void playCoin();
+    vector<int> getCoinDirections();
+    void playCoin(int dir);
     
 public:
     BlindGame(int id, int maxPlayer, string name);
@@ -62,9 +63,7 @@ public:
     string getName();
     //setters
     void setCurrPlayers(int currPlayers);
-    bool isFinished(){
-        return false;
-    }
+    bool isFinished();
 };
 
 

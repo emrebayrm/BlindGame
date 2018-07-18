@@ -16,6 +16,11 @@ Game::Game(int id, int maxPlayer, string name) {
     this->maxPlayer = maxPlayer;
     this->name = name;
     this->currPlayers = 0;
+    players.resize(maxPlayer);
+}
+
+Player* Game::getPlater(int playerId) {
+    return players[playerId];
 }
 
 int Game::findPlayerId() {
@@ -33,7 +38,8 @@ int Game::findPlayerId() {
 }
 
 string Game::toString() {
-    return "Game: " + name + ", GameId: ";
+    return "GameId: " + to_string(getId()) +  "   Game Name: " + getName() + "    " +
+           to_string(getCurrPlayers())+"/" +to_string(getMaxPlayer());
 }
 
 //getters

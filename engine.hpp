@@ -21,7 +21,7 @@ protected:
 private:
 
 public:
-    virtual GameCommand_t * doHandshake() = 0;
+    virtual Command * doHandshake() = 0;
 };
 
 
@@ -30,7 +30,7 @@ private:
     vector<Game *> gamelist;
     int uid = 0;
     const static int portNumber = 1550;
-
+    int debug ;
 
 public:
     int generateUniqueId(){
@@ -41,28 +41,28 @@ public:
     }
     bool listGames();
 
-    bool joinGame(int gameid, char *playerName);
+    bool joinGame(GameJoinCommand_t command);
 
-    virtual Game *createGame(GameCommand_t *command) = 0;
+    virtual Game *createGame(GameCreateCommand_t command) = 0;
 
-    bool observeGame(int gameid);
+    bool observeGame(GameObserveCommand_t observeData);
 
     bool startGameIntoThread(Game *game);
 
     GameServerEngine() {
+        debug = 0;
         networkModule = new ServerNetworkModule();
         networkModule->init(portNumber);
     }
 
-    bool startServer();
+    void setNetworkModule(NetworkModule * _networkModule){
+        this->networkModule = _networkModule;
+    }
+
+    bool startServer(int debug = 0);
 
 };
 
-class BlindGameServerEngine : public GameServerEngine {
-public:
-    GameCommand_t * doHandshake();
-    Game *createGame(GameCommand_t *command);
-};
 
 /*
 void *gameManger(void* g){

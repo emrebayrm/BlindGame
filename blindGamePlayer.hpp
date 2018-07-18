@@ -15,14 +15,17 @@
 
 #define MAX_MOVES 3
 
+class BlindGame;
+
 class BlindGamePlayer : public Player {
-private:
+protected:
     Point *location;
     static const int maxMove = MAX_MOVES;
     int currMove;
 public:
+    BlindGamePlayer();
     BlindGamePlayer(int id, string name);
-    
+    Point* getLocation();
     string toString();
     
     //increments currMove by 1.

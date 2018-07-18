@@ -3,21 +3,14 @@
 //
 
 #include "engine.hpp"
+#include "packets.hpp"
+#include "dummies/DummyNetworkModule.h"
+#include "dummies/DummyGameServerEngine.h"
 
-class testNetworkModule : public NetworkModule {
-public:
-    void init(int port) override {
-
-    }
-
-    int sendData(void *buf, int size) override {
-        return 0;
-    }
-
-    int recvData(void *buf, int size) override {
-        return 0;
-    }
-
-public:
-
-};
+int main(){
+    DummyGameServerEngine gameServerEngine;
+    DummyNetworkModule *testNetworkModule = new DummyNetworkModule();
+    testNetworkModule->init(55);
+    gameServerEngine.setNetworkModule(testNetworkModule);
+    gameServerEngine.startServer();
+}

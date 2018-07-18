@@ -7,12 +7,13 @@
 //
 
 #include "blindGamePlayer.hpp"
-#include "blindGame.cpp"
 
 BlindGamePlayer::BlindGamePlayer(int id, string name) : Player(id, name) {
     this->location = NULL;
     resetCurrMove();
 }
+
+BlindGamePlayer::BlindGamePlayer(){}
 
 bool BlindGamePlayer::isDone() {
     return currMove == maxMove;
@@ -35,6 +36,10 @@ bool BlindGamePlayer::move(int dir, BlindGame *game) {
         return true;
     }
     return false;
+}
+
+Point* BlindGamePlayer::getLocation() {
+    return location;
 }
 
 string BlindGamePlayer::toString() {
