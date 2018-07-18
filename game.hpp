@@ -33,6 +33,7 @@ public:
     int getMaxPlayer();
     int getCurrPlayers();
     string getName();
+    Player* getPlater(int playerId);
 
     virtual string toString();
     

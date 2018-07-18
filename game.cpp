@@ -19,6 +19,10 @@ Game::Game(int id, int maxPlayer, string name) {
     players.resize(maxPlayer);
 }
 
+Player* Game::getPlater(int playerId) {
+    return players[playerId];
+}
+
 int Game::findPlayerId() {
     int playerId = -1;
     for(int i = 0; i < maxPlayer; ++i) {
