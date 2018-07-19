@@ -26,8 +26,8 @@ void MainWindow::init(string topic,string address,string clientid){
 
     thread->setMqttOptions(topic,address,clientid);
     thread->init();
-
     thread->run();
+
     sender->init();
 
 }

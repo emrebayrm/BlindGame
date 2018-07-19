@@ -17,7 +17,7 @@ int main(int argc, char *argv[]){
 
     command = static_cast<Command *>(malloc(sizeof(Command) ));
     dataCommand = static_cast<GameDataCommand_t *>(malloc(sizeof(GameDataCommand_t)));
-    networkModule.init(1550);
+    networkModule.init(1550, "127.0.0.1");
 
     networkModule.recvData(command,sizeof(Command));
 
@@ -71,7 +71,7 @@ int main(int argc, char *argv[]){
     //2. Client
 
     ClientNetworkModule networkModule2;
-    networkModule2.init(1550);
+    networkModule2.init(1550, "127.0.0.1");
 
     cout << "asd" <<endl;
     networkModule2.recvData(command,sizeof(Command));
@@ -103,7 +103,7 @@ int main(int argc, char *argv[]){
 
     //Observe
     ClientNetworkModule networkModule3;
-    networkModule3.init(1550);
+    networkModule3.init(1550, "127.0.0.1");
 
     Command *commandOb;
     GameObserveCommand_t *dataCommandOb;

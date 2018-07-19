@@ -10,7 +10,7 @@
 int main(){
     DummyGameServerEngine gameServerEngine;
     DummyNetworkModule *testNetworkModule = new DummyNetworkModule();
-    testNetworkModule->init(55);
+    testNetworkModule->init(55, nullptr);
     gameServerEngine.setNetworkModule(testNetworkModule);
     gameServerEngine.startServer();
 }

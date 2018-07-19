@@ -82,14 +82,16 @@ int mqttSubscriber::receive(void *message) {
     sprintf(topic,"%s",getTopic().c_str());
     if ((rc = MQTTClient_receive(this->mqttClient, &topic, &lenTopic, &_message, TIMEOUT)) != MQTTCLIENT_SUCCESS) {
         perror("Failed ");
-        exit(-1);
+        //exit(-1);
     }
 
     if(_message != NULL) {
-        memcpy(message,_message->payload,_message->payloadlen);
+        message = _message->payload;
+        return _message->payloadlen;
     }
     else{
         printf("No message Received \n");
     }
 
+    return 0;
 }

@@ -26,7 +26,7 @@ int main(int argc, char *argv[]){
     
     command = static_cast<Command *>(malloc(sizeof(Command) ));
     dataCommand = static_cast<GameDataCommand_t *>(malloc(sizeof(GameDataCommand_t)));
-    networkModule.init(1550);
+    networkModule.init(1550, "127.0.0.1");
     
     networkModule.recvData(command,sizeof(Command));
     
@@ -35,7 +35,8 @@ int main(int argc, char *argv[]){
     networkModule.recvData(dataCommand, command->length);
     
     cout << dataCommand->data << endl;
-    
+    char *temp;
+    if()
     cout << "Game List End " << endl;
     
    
@@ -48,6 +49,7 @@ int main(int argc, char *argv[]){
     GameCreateCommand_t *createPacket;
     GameJoinCommand_t *joinPacket;
     Command *createCommand;
+    int maxPlayer;
     switch (commandChoice) {
         case CREATE:
             createCommand = static_cast<Command *>(malloc(sizeof(Command) + sizeof(GameJoinCommand_t) + sizeof(GameCreateCommand_t)));
@@ -60,6 +62,7 @@ int main(int argc, char *argv[]){
             cin >> createPacket->gameName;
             cout << "enter max player: ";
             cin >> createPacket->maxPlayer;
+            maxPlayer = createPacket->maxPlayer;
             cout << "enter player name: ";
             cin >> joinPacket->playerName;
             networkModule.sendData(createCommand,sizeof(Command) + sizeof(GameCreateCommand_t) + sizeof(GameJoinCommand_t));
@@ -100,7 +103,8 @@ int main(int argc, char *argv[]){
     
     char *pid = (char*) malloc(sizeof(char) * 15);
     sprintf(pid, "PlayerP%d", cliendId);
-    
+
+    cout << "Pos topic : "<<posTopic << " Dis Topic : " << disTopic <<endl;
     mqttPublisher *positionSender = new mqttPublisher(posTopic, "127.0.0.1", sid);
     mqttSubscriber *distanceCollector = new mqttSubscriber(disTopic, "127.0.0.1", pid);
     
@@ -109,6 +113,11 @@ int main(int argc, char *argv[]){
     
     int winner = -1;
 
+    cout << "Game Starting " << endl;
+
+    while(1){
+
+    }
     
     
     return 0;

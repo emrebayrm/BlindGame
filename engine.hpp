@@ -52,7 +52,7 @@ public:
     GameServerEngine() {
         debug = 0;
         networkModule = new ServerNetworkModule();
-        networkModule->init(portNumber);
+        networkModule->init(portNumber, "127.0.0.1");
     }
 
     void setNetworkModule(NetworkModule * _networkModule){
