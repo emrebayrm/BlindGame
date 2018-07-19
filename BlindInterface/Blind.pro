@@ -24,13 +24,19 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+    communcationthread.cpp \
+    ../mqttHandler.cpp
 
 HEADERS += \
-        mainwindow.h
+        mainwindow.h \
+    communcationthread.h \
+    ../mqttHandler.h
 
 FORMS += \
         mainwindow.ui
+
+LIBS += -lpaho-mqtt3c
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

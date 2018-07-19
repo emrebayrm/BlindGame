@@ -111,7 +111,7 @@ bool GameServerEngine::observeGame(GameObserveCommand_t observeData) {
 
             sentTopic->commandType = DATA;
             dataCommand = reinterpret_cast<GameDataCommand_t *>(sentTopic->context);
-            sentTopic->length = sprintf(dataCommand->data,"pos_%d , dis_%d",observeData.gameId,observeData.gameId);
+            sentTopic->length = sprintf(dataCommand->data,"pos%d , dis%d",observeData.gameId,observeData.gameId);
 
             networkModule->sendData(sentTopic,sizeof(Command) + sizeof(GameDataCommand_t));
 
