@@ -181,7 +181,7 @@ int main(int argc, char *argv[]) {
             }
         }
         //printMap(row, col, x, y, distance);
-//        while(curMove < 3) {
+        while(curMove < 3) {
             cout << "X: " << x << "  Y: " << y << "  Dist: " << distance << "   CurrMove: " << curMove << endl;
             int inp;
             againinput:
@@ -196,8 +196,8 @@ int main(int argc, char *argv[]) {
             buffer.append(",");
             buffer.append(to_string(inp));
             positionSender->publish(buffer);
-//            curMove++;
-//        }
+            curMove++;
+        }
     }
 
     cout << "Winner" <<flag << endl;
