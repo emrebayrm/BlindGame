@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) {
 
     command = static_cast<Command *>(malloc(sizeof(Command)));
     dataCommand = static_cast<GameDataCommand_t *>(malloc(sizeof(GameDataCommand_t)));
-    char addres[] = "127.0.0.1";
+    char addres[] = "192.168.43.98";
     networkModule.init(1550, addres);
 
     networkModule.recvData(command, sizeof(Command));
@@ -46,7 +46,7 @@ int main(int argc, char *argv[]) {
     // Create Packet Send
 
     int commandChoice;
-    cout << "enter createCommand: ";
+    cout << "enter Command: ";
     cin >> commandChoice;
 
     GameCreateCommand_t *createPacket;
@@ -77,7 +77,8 @@ int main(int argc, char *argv[]) {
         case JOIN:
             createCommand = static_cast<Command *>(malloc(sizeof(Command) + sizeof(GameJoinCommand_t)));
             createCommand->commandType = JOIN;
-            joinPacket = reinterpret_cast<GameJoinCommand_t *>(createCommand->context + sizeof(GameCreateCommand_t));
+            createCommand->length =sizeof(GameJoinCommand_t);
+            joinPacket = reinterpret_cast<GameJoinCommand_t *>(createCommand->context);
             cout << "enter game id: ";
             cin >> joinPacket->gameId;
             cout << "enter player name: ";
@@ -87,7 +88,7 @@ int main(int argc, char *argv[]) {
                 temp = strtok(dataCommand->data, ":/\n ");
                 while (temp != NULL) {
                     temp = strtok(NULL, ":/\n ");
-                    temp = strtok(NULL, ":/\n ");
+                   // temp = strtok(NULL, ":/\n ");
                     gid = atoi(temp);
                     temp = strtok(NULL, ":/\n ");
                     temp = strtok(NULL, ":/\n ");
@@ -183,8 +184,13 @@ int main(int argc, char *argv[]) {
 //        while(curMove < 3) {
             cout << "X: " << x << "  Y: " << y << "  Dist: " << distance << "   CurrMove: " << curMove << endl;
             int inp;
+            againinput:
             cout << "Enter direction 0: Up 1:Right 2:Down 3:Left " << endl;
             cin >> inp;
+            if(inp > 3 || inp < 0) {
+                cout << "Invalid Direction !!" <<endl;
+                goto againinput;
+            }
             buffer.clear();
             buffer.append(to_string(playerId));
             buffer.append(",");

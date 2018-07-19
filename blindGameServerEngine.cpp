@@ -82,6 +82,7 @@ void *gameRunner(void *arg){
     game = (BlindGame*)(arg);
     int winner = -1;
     cout << game <<endl;
+    while(game->getCurrPlayers() != game->getMaxPlayer());
     game->startGame();
     vector<pair<int,int>> dists = game->getCoinDistances();
     usleep(500000);

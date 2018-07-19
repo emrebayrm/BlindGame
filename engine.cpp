@@ -78,6 +78,7 @@ bool GameServerEngine::joinGame(GameJoinCommand_t command) {
     GameDataCommand_t *dataCommand;
     Command *sentTopic;
     static int unqid = 0;
+    cout << command.gameId << " -- " << command.playerName << endl;
     for (int i = 0; i < gamelist.size(); ++i) {
         if (gamelist[i]->getId() == command.gameId) {
 
