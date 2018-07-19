@@ -85,6 +85,7 @@ void *gameRunner(void *arg){
     game->startGame();
     while((winner = game->isFinished()) == -1){
         vector<pair<int,int>> dists = game->getCoinDistances();
+        usleep(500000);
         sendGameInfos(game, dists);
         while(!game->isTurnFinished()) {
             char *received;

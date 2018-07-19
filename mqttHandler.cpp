@@ -56,6 +56,17 @@ int mqttSubscriber::init() {
 
     conn_opts.keepAliveInterval = 20;
     conn_opts.cleansession = 0;
+    if ((rc = MQTTClient_connect(this->mqttClient, &conn_opts)) != MQTTCLIENT_SUCCESS)
+    {
+        printf("Failed to connect, return code %d\n", rc);
+        rc = -1;
+    }
+    printf("%s \n",getTopic().c_str());
+    if( (rc =  MQTTClient_subscribe(this->mqttClient,getTopic().c_str(),QOS)) != MQTTCLIENT_SUCCESS)
+    {
+        printf("Failed to subscribe, return code %d\n",rc);
+        rc = -1;
+    }
 
     return rc;
 }
@@ -66,24 +77,16 @@ int mqttSubscriber::receive(void *message) {
     lenTopic = 30;
     int i = 0;
 
-    if ((rc = MQTTClient_connect(this->mqttClient, &conn_opts)) != MQTTCLIENT_SUCCESS)
-    {
-        printf("Failed to connect, return code %d\n", rc);
-        rc = -1;
-    }
-
-    if( (rc =  MQTTClient_subscribe(this->mqttClient,getTopic().c_str(),QOS)) != MQTTCLIENT_SUCCESS)
-    {
-        printf("Failed to subscribe, return code %d\n",rc);
-        rc = -1;
-    }
-
     char *topic = static_cast<char *>(malloc(sizeof(char) * 30));
     sprintf(topic,"%s",getTopic().c_str());
-    if ((rc = MQTTClient_receive(this->mqttClient, &topic, &lenTopic, &_message, TIMEOUT)) != MQTTCLIENT_SUCCESS) {
-        perror("Failed ");
-        //exit(-1);
-    }
+    do {
+        if ((rc = MQTTClient_receive(this->mqttClient, &topic, &lenTopic, &_message, TIMEOUT)) != MQTTCLIENT_SUCCESS) {
+            perror("Failed ");
+            //exit(-1);
+        }
+
+    }while(topic == NULL || getTopic().compare(topic) != 0);
+    printf(" %s -- %s \n",topic,getTopic().c_str());
 
     if(_message != NULL) {
         memcpy(message, _message->payload,_message->payloadlen);

@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) {
 
     command = static_cast<Command *>(malloc(sizeof(Command)));
     dataCommand = static_cast<GameDataCommand_t *>(malloc(sizeof(GameDataCommand_t)));
-    char addres[] = "127.0.0.1";
+    char addres[] = "192.168.2.229";
     networkModule.init(1550, addres);
 
     networkModule.recvData(command, sizeof(Command));
@@ -134,8 +134,8 @@ int main(int argc, char *argv[]) {
     sprintf(pid, "PlayerP%d", cliendId);
 
     cout << "Pos topic : " << posTopic << " Dis Topic : " << disTopic << endl;
-    mqttPublisher *positionSender = new mqttPublisher(posTopic, "127.0.0.1", sid);
-    mqttSubscriber *distanceCollector = new mqttSubscriber(disTopic, "127.0.0.1", pid);
+    mqttPublisher *positionSender = new mqttPublisher(posTopic, addres, sid);
+    mqttSubscriber *distanceCollector = new mqttSubscriber(disTopic, addres, pid);
 
     positionSender->init();
     distanceCollector->init();
