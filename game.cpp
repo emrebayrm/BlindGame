@@ -46,7 +46,7 @@ int Game::findPlayerId() {
 }
 
 string Game::toString() {
-    return "GameId: " + to_string(getId()) +  "   Game Name: " + getName() + "    " +
+    return "GameId:" + to_string(getId()) +  "   Game Name:" + getName() + "    " +
            to_string(getCurrPlayers())+"/" +to_string(getMaxPlayer());
 }
 

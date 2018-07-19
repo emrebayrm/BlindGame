@@ -102,7 +102,7 @@ void ClientNetworkModule::init(int port, char *address) {
       printf("\n Error : Could not create socket \n");
       return ;
     }
- 
+    SOCK_NONBLOCK
   serv_addr.sin_family = AF_INET;
   serv_addr.sin_port = htons(port);
   serv_addr.sin_addr.s_addr = inet_addr(address);

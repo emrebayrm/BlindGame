@@ -8,6 +8,7 @@
 #include "blindGamePlayer.hpp"
 #include <vector>
 #include <cstring>
+#include <bits/signum.h>
 
 Command * BlindGameServerEngine::doHandshake() {
     Command *command = static_cast<Command *>(malloc(sizeof(Command)));
@@ -43,16 +44,19 @@ Game *BlindGameServerEngine::createGame(GameCreateCommand_t createPacket, GameJo
     pos.append(to_string(game->getId()));
     dis.append("dis");
     dis.append(to_string(game->getId()));
-    game->setTopicNames(pos,dis);
+    game->setTopicNames(dis,pos);
     startGameIntoThread(game);
 
     return game;
 }
 
 void sendGameInfos(BlindGame *game, vector<pair<int,int>> dists) {
-    char *distPack = (char*) malloc(game->getCurrPlayers() * 12 * sizeof(char) + 4);
-    strcat(distPack,to_string(game->isFinished()));
+    char *distPack;
+    distPack = (char*) calloc(sizeof(char), game->getCurrPlayers() * 12 * sizeof(char) + 4);
+
+    strcat(distPack,to_string(game->isFinished()).c_str());
     strcat(distPack,",");
+    //flag,pid,currMove,X,Y,dist-.....
     for(int i = 0; i < dists.size(); ++i) {
         pair<int,int> p = dists[i];
         BlindGamePlayer *player = (BlindGamePlayer*) game->getPlayer(p.first);
@@ -69,7 +73,7 @@ void sendGameInfos(BlindGame *game, vector<pair<int,int>> dists) {
     }
 
     strcat(distPack, "");
-
+    cout << "DistPack:"<< distPack << endl;
     game->distanceSender->publish(distPack);
 }
 
@@ -84,14 +88,23 @@ void *gameRunner(void *arg){
         sendGameInfos(game, dists);
         while(!game->isTurnFinished()) {
             char *received;
+            received = static_cast<char *>(calloc(sizeof(char), 20));
             if(game->positionCollecter->receive(received) != 0) {
-                char *playerId = strtok(received, ",");
-                int pId = atoi(playerId);
-                char *dir = strtok(NULL, ",");
-                int pDir = atoi(dir);
+                char *playerId;
+                int pId;
+                char *dir;
+                int pDir;
+                SIGALRM;
+                cout << "received packet from client : " << received << endl;
+                playerId = strtok(received, ",");
+                pId = atoi(playerId);
+                dir = strtok(NULL, ",");
+                pDir = atoi(dir);
                 game->movePlayer(pDir, pId);
-                sendGameInfos(game, dists);
+//                dists = game->getCoinDistances();
+//                sendGameInfos(game, dists);
             }
+            free(received);
         }
     }
 }

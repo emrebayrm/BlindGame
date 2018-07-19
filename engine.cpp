@@ -87,10 +87,10 @@ bool GameServerEngine::joinGame(GameJoinCommand_t command) {
 
             sentTopic->commandType = DATA;
             dataCommand = reinterpret_cast<GameDataCommand_t *>(sentTopic->context);
-            sentTopic->length = sprintf(dataCommand->data, "%d,%d,pos%d,dis%d",unqid,pid , command.gameId, command.gameId);
+            sentTopic->length = sprintf(dataCommand->data, "%d,%d,dis%d,pos%d",unqid,pid , command.gameId, command.gameId);
             ++unqid;
             networkModule->sendData(sentTopic, sizeof(Command) + sentTopic->length);
-
+            cout << "Topics :" << dataCommand->data << endl;
             free(sentTopic);
         }
     }

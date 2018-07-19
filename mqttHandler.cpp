@@ -54,6 +54,18 @@ int mqttSubscriber::init() {
     MQTTClient_create(&this->mqttClient,getAddress().c_str() , getClientId().c_str(),
                       MQTTCLIENT_PERSISTENCE_NONE, NULL);
 
+    conn_opts.keepAliveInterval = 20;
+    conn_opts.cleansession = 0;
+
+    return rc;
+}
+
+int mqttSubscriber::receive(void *message) {
+    MQTTClient_message *_message;
+    int lenTopic,rc;
+    lenTopic = 30;
+    int i = 0;
+
     if ((rc = MQTTClient_connect(this->mqttClient, &conn_opts)) != MQTTCLIENT_SUCCESS)
     {
         printf("Failed to connect, return code %d\n", rc);
@@ -66,18 +78,6 @@ int mqttSubscriber::init() {
         rc = -1;
     }
 
-    conn_opts.keepAliveInterval = 20;
-    conn_opts.cleansession = 1;
-
-    return rc;
-}
-
-int mqttSubscriber::receive(void *message) {
-    MQTTClient_message *_message;
-    int lenTopic,rc;
-    lenTopic = 30;
-    int i = 0;
-
     char *topic = static_cast<char *>(malloc(sizeof(char) * 30));
     sprintf(topic,"%s",getTopic().c_str());
     if ((rc = MQTTClient_receive(this->mqttClient, &topic, &lenTopic, &_message, TIMEOUT)) != MQTTCLIENT_SUCCESS) {
@@ -86,7 +86,7 @@ int mqttSubscriber::receive(void *message) {
     }
 
     if(_message != NULL) {
-        message = _message->payload;
+        memcpy(message, _message->payload,_message->payloadlen);
         return _message->payloadlen;
     }
     else{
