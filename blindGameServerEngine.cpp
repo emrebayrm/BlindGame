@@ -8,7 +8,7 @@
 #include "blindGamePlayer.hpp"
 #include <vector>
 #include <cstring>
-#include <bits/signum.h>
+
 
 Command * BlindGameServerEngine::doHandshake() {
     Command *command = static_cast<Command *>(malloc(sizeof(Command)));
@@ -94,7 +94,6 @@ void *gameRunner(void *arg){
                 int pId;
                 char *dir;
                 int pDir;
-                SIGALRM;
                 cout << "received packet from client : " << received << endl;
                 playerId = strtok(received, ",");
                 pId = atoi(playerId);

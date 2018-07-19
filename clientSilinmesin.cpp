@@ -134,8 +134,8 @@ int main(int argc, char *argv[]) {
     sprintf(pid, "PlayerP%d", cliendId);
 
     cout << "Pos topic : " << posTopic << " Dis Topic : " << disTopic << endl;
-    mqttPublisher *positionSender = new mqttPublisher(disTopic, "127.0.0.1", sid);
-    mqttSubscriber *distanceCollector = new mqttSubscriber(posTopic, "127.0.0.1", pid);
+    mqttPublisher *positionSender = new mqttPublisher(posTopic, "127.0.0.1", sid);
+    mqttSubscriber *distanceCollector = new mqttSubscriber(disTopic, "127.0.0.1", pid);
 
     positionSender->init();
     distanceCollector->init();
