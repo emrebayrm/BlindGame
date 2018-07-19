@@ -51,8 +51,6 @@ private:
 
     
     string distanceTopic;
-
-    
     string positionTopic;
 
     const string address;
