@@ -50,7 +50,9 @@ Game *BlindGameServerEngine::createGame(GameCreateCommand_t createPacket, GameJo
 }
 
 void sendGameInfos(BlindGame *game, vector<pair<int,int>> dists) {
-    char *distPack = (char*) malloc(game->getCurrPlayers() * 12 * sizeof(char) + 1);
+    char *distPack = (char*) malloc(game->getCurrPlayers() * 12 * sizeof(char) + 4);
+    strcat(distPack,to_string(game->isFinished()));
+    strcat(distPack,",");
     for(int i = 0; i < dists.size(); ++i) {
         pair<int,int> p = dists[i];
         BlindGamePlayer *player = (BlindGamePlayer*) game->getPlayer(p.first);
@@ -65,7 +67,9 @@ void sendGameInfos(BlindGame *game, vector<pair<int,int>> dists) {
         strcat(distPack, to_string(p.second).c_str());
         strcat(distPack,"-");
     }
+
     strcat(distPack, "");
+
     game->distanceSender->publish(distPack);
 }
 
@@ -76,13 +80,9 @@ void *gameRunner(void *arg){
     cout << game <<endl;
     game->startGame();
     while((winner = game->isFinished()) == -1){
-        cout << "---" << endl;
         vector<pair<int,int>> dists = game->getCoinDistances();
-        cout << "000" << endl;
         sendGameInfos(game, dists);
-        cout << "111" << endl;
         while(!game->isTurnFinished()) {
-            cout << "222" << endl;
             char *received;
             if(game->positionCollecter->receive(received) != 0) {
                 char *playerId = strtok(received, ",");

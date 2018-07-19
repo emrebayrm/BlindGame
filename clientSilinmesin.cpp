@@ -108,6 +108,7 @@ int main(int argc, char *argv[]){
     distanceCollector->init();
     
     int winner = -1;
+    
 
     
     
