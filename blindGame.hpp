@@ -53,7 +53,7 @@ private:
     string distanceTopic;
     string positionTopic;
 
-    const string address;
+    const string address = "127.0.0.1";
 
 public:
     BlindGame(int id, int maxPlayer, string name);

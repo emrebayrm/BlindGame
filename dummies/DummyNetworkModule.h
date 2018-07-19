@@ -15,7 +15,7 @@ using namespace std;
 class DummyNetworkModule : public ServerNetworkModule{
 public:
     Command *command;
-    void init(int port) override {
+    void init(int port, char *address) override {
         command = (Command*) malloc(MAX_PAYLOAD);
     }
 

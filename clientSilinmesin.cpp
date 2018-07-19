@@ -26,7 +26,7 @@ int main(int argc, char *argv[]){
     
     command = static_cast<Command *>(malloc(sizeof(Command) ));
     dataCommand = static_cast<GameDataCommand_t *>(malloc(sizeof(GameDataCommand_t)));
-    networkModule.init(1550);
+    networkModule.init(1550, "127.0.0.1");
     
     networkModule.recvData(command,sizeof(Command));
     

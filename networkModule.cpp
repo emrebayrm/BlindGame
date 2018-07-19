@@ -14,7 +14,7 @@
 #include <memory.h>
 
 #define MAX_LISTEN 20
-void ServerNetworkModule::init(int port) {
+void ServerNetworkModule::init(int port, char *address) {
     struct sockaddr_in serverAddr;
     socklen_t serverlen;
     int fdSocket=-1;
@@ -94,7 +94,7 @@ void ServerNetworkModule::listenClient() {
     currentClientFd = accept(getFd(),(struct sockaddr*)&clientAddr,&clientAddrLen);
 }
 
-void ClientNetworkModule::init(int port) {
+void ClientNetworkModule::init(int port, char *address) {
   int sockfd = 0,n = 0;
   struct sockaddr_in serv_addr;
   if((sockfd = socket(AF_INET, SOCK_STREAM, 0))< 0)
@@ -105,7 +105,7 @@ void ClientNetworkModule::init(int port) {
  
   serv_addr.sin_family = AF_INET;
   serv_addr.sin_port = htons(port);
-  serv_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
+  serv_addr.sin_addr.s_addr = inet_addr(address);
  
   if(connect(sockfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr))<0)
     {

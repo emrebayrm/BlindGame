@@ -27,7 +27,7 @@ Command * BlindGameServerEngine::doHandshake() {
 
 
 Game *BlindGameServerEngine::createGame(GameCreateCommand_t createPacket, GameJoinCommand_t joinPacket) {
-    Game *game;
+    BlindGame *game;
 
     cout << "requested options are : " << createPacket.maxPlayer << " : " <<
          createPacket.gameName << " : " << sizeof(BlindGame) << endl;
@@ -38,6 +38,12 @@ Game *BlindGameServerEngine::createGame(GameCreateCommand_t createPacket, GameJo
     joinPacket.gameId = game->getId();
     joinGame(joinPacket);
     cout << game <<endl;
+    string pos,dis;
+    pos.append("pos");
+    pos.append(to_string(game->getId()));
+    dis.append("dis");
+    dis.append(to_string(game->getId()));
+    game->setTopicNames(pos,dis);
     startGameIntoThread(game);
 
     return game;
@@ -68,6 +74,7 @@ void *gameRunner(void *arg){
     game = (BlindGame*)(arg);
     int winner = -1;
     cout << game <<endl;
+    game->startGame();
     while((winner = game->isFinished()) == -1){
         cout << "---" << endl;
         vector<pair<int,int>> dists = game->getCoinDistances();
@@ -92,7 +99,7 @@ void *gameRunner(void *arg){
 bool BlindGameServerEngine::startGameIntoThread(Game *game) {
     GameServerEngine::startGameIntoThread(game);
     pthread_t id;
-    cout << game->isFinished() <<  "sadsa" <<endl;
+
     pthread_create(&id,NULL,gameRunner,game);
     return true;
 }

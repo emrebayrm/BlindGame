@@ -14,7 +14,7 @@ private:
     int fd=-1;
     int port;
 public:
-    virtual void init(int port) = 0;
+    virtual void init(int port, char *address) = 0;
     virtual int sendData(void *buf, int size) = 0;
     virtual int recvData(void *buf, int size) = 0;
     int getFd(){ return fd;}
@@ -27,7 +27,7 @@ class ServerNetworkModule : public NetworkModule{
 private:
     int currentClientFd=-1;
 public:
-    void init(int port);
+    void init(int port, char *address);
     int sendData(void *buf, int size);
     int recvData(void *buf, int size);
 
@@ -39,7 +39,7 @@ class ClientNetworkModule : public NetworkModule{
 private:
     int fd=-1;
 public:
-    void init(int port);
+    void init(int port, char *address);
     int sendData(void *buf, int size);
     int recvData(void *buf, int size);
     void setFd(int _fd){ fd=_fd;}
