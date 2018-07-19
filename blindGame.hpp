@@ -49,10 +49,10 @@ private:
     void placePlayers();
     Point* getRandomCoinPoint();
 
-    mqttPublisher *distanceSender;
+    
     string distanceTopic;
 
-    mqttSubscriber *positionCollecter;
+    
     string positionTopic;
 
     const string address;
@@ -67,6 +67,9 @@ public:
     int isFinished();
     void startGame();
     bool isTurnFinished();
+    
+    mqttPublisher *distanceSender;
+    mqttSubscriber *positionCollecter;
     
     //getters
     int getMaxPlayer();
