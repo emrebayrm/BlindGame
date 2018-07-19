@@ -6,7 +6,7 @@
 #define BLINDGAME_NETWORKMODULE_H
 
 #include <unistd.h>
-#define MAX_PAYLOAD 200
+#define MAX_PAYLOAD 1400
 
 
 class NetworkModule{

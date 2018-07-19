@@ -22,13 +22,11 @@ int main(int argc, char *argv[]){
     networkModule.recvData(command,sizeof(Command));
 
     cout << "Game List Start " << endl;
-    while (command->length != -1){
+
         networkModule.recvData(dataCommand, command->length);
 
         cout << dataCommand->data << endl;
 
-        networkModule.recvData(command,sizeof(Command));
-    }
     cout << "Game List End " << endl;
 
     // Create Packet Send
@@ -61,7 +59,8 @@ int main(int argc, char *argv[]){
 
     topicCommand = static_cast<Command *>(malloc(sizeof(Command) + sizeof(GameDataCommand_t)));
 
-    networkModule.recvData(topicCommand,sizeof(Command) + sizeof(GameDataCommand_t));
+    networkModule.recvData(topicCommand,sizeof(Command));
+    networkModule.recvData(topicCommand->context,topicCommand->length);
 
     topicData = reinterpret_cast<GameDataCommand_t *>(topicCommand->context);
 
@@ -78,15 +77,11 @@ int main(int argc, char *argv[]){
     networkModule2.recvData(command,sizeof(Command));
 
     cout << "Game List Start " << endl;
-    while (command->length != -1){
-        cout << "command length "  << command->length << endl;
 
-        networkModule2.recvData(dataCommand, command->length);
+    cout << "command length "  << command->length << endl;
+    networkModule2.recvData(dataCommand, command->length);
+    cout << dataCommand->data << endl;
 
-        cout << dataCommand->data << endl;
-
-        networkModule2.recvData(command,sizeof(Command));
-    }
     cout << "Game List End " << endl;
 
     // Join Packet Send
@@ -103,7 +98,23 @@ int main(int argc, char *argv[]){
     sprintf(joinPacket->playerName,"oguz");
 
     networkModule2.sendData(joinComand,sizeof(Command) + sizeof(GameJoinCommand_t));
+    sleep(1);
     networkModule2.closeConnection();
 
+    //Observe
+    ClientNetworkModule networkModule3;
+    networkModule3.init(1550);
+
+    Command *commandOb;
+    GameObserveCommand_t *dataCommandOb;
+
+    commandOb = static_cast<Command *>(malloc(sizeof(Command) + sizeof(GameObserveCommand_t)));
+    dataCommandOb = reinterpret_cast<GameObserveCommand_t *>(commandOb->context);
+    commandOb->commandType = OBSERVE;
+    commandOb->length = sizeof(GameObserveCommand_t);
+    dataCommandOb->gameId = 1;
+    networkModule3.sendData(commandOb,sizeof(Command) + commandOb->length);
+
+    return 0;
 
 }

@@ -28,13 +28,14 @@ Game *BlindGameServerEngine::createGame(GameCreateCommand_t createPacket, GameJo
 
     cout << "requested options are : " << createPacket.maxPlayer << " : " <<
          createPacket.gameName << " : " << sizeof(BlindGame) << endl;
-    game = new DummyGame(generateUniqueId(), createPacket.maxPlayer, createPacket.gameName);
+    game = new BlindGame(generateUniqueId(), createPacket.maxPlayer, createPacket.gameName);
 
-    startGameIntoThread(game);
     insertNewGame(game);
 
     joinPacket.gameId = game->getId();
     joinGame(joinPacket);
+
+    startGameIntoThread(game);
 
     return game;
 }

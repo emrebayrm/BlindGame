@@ -36,14 +36,16 @@ bool GameServerEngine::startServer(int debug) {
         } else if (command->commandType == JOIN) {
             cout << "Join" << endl;
             GameJoinCommand_t *joinCommand;
-            joinCommand = reinterpret_cast<GameJoinCommand_t *>(command->context);
+            joinCommand = new GameJoinCommand_t;
+            networkModule->recvData(joinCommand,command->length);
 
             joinGame(*joinCommand);
         } else if (command->commandType == OBSERVE) {
             cout << "Observe" << endl;
             GameObserveCommand_t *observeCommand;
-            observeCommand = reinterpret_cast<GameObserveCommand_t *>(command->context);
+            observeCommand = new GameObserveCommand_t;
 
+            networkModule->recvData(observeCommand,command->length);
             observeGame(*observeCommand);
         }
     }
@@ -54,48 +56,45 @@ bool GameServerEngine::listGames() {
     Command *buffer;
     GameDataCommand_t *dataCommand;
     buffer = (Command *)(malloc(sizeof(Command) + sizeof(GameDataCommand_t)));
-
+    dataCommand = reinterpret_cast<GameDataCommand_t *>(buffer->context);
+    memset(dataCommand,0,sizeof(GameDataCommand_t));
     buffer->commandType = DATA;
-    for (int i = 0; i < gamelist.size(); ++i) {
-
-        buffer->length = gamelist[i]->toString().size() + sizeof(Command);
-
-        dataCommand = reinterpret_cast<GameDataCommand_t *>(buffer->context);
-
-        sprintf(dataCommand->data,"%s",gamelist[i]->toString().c_str());
-        cout << "Server sended length " << buffer->length << endl;
-        networkModule->sendData(buffer, buffer->length);
+    int i;
+    for (i = 0; i < gamelist.size(); ++i) {
+        strcat(dataCommand->data,gamelist[i]->toString().c_str());
+        strcat(dataCommand->data,"\n");
     }
+    if (i > 0)
+        buffer->length = strlen(dataCommand->data);
+    else
+        buffer->length = 0;
+    cout << "sended data" << dataCommand->data << endl;
 
-    buffer->length = -1;
-    networkModule->sendData(buffer, sizeof(Command));
-
-    free(buffer);
+    networkModule->sendData(buffer,buffer->length + sizeof(Command));
     return true;
 }
-
 bool GameServerEngine::joinGame(GameJoinCommand_t command) {
-    int *pid = new int;
+    int pid;
     GameDataCommand_t *dataCommand;
     Command *sentTopic;
-
+    static int unqid = 0;
     for (int i = 0; i < gamelist.size(); ++i) {
         if (gamelist[i]->getId() == command.gameId) {
 
-            *pid = gamelist[i]->join(command.playerName);
+            pid = gamelist[i]->join(command.playerName);
 
             sentTopic = static_cast<Command *>(malloc(sizeof(Command) + sizeof(GameDataCommand_t)));
 
             sentTopic->commandType = DATA;
             dataCommand = reinterpret_cast<GameDataCommand_t *>(sentTopic->context);
-            sentTopic->length = sprintf(dataCommand->data,"pos_%d , dis_%d",command.gameId,command.gameId);
+            sentTopic->length = sprintf(dataCommand->data, "%d,%d,pos%d,dis%d",unqid,pid , command.gameId, command.gameId);
+            ++unqid;
+            networkModule->sendData(sentTopic, sizeof(Command) + sentTopic->length);
 
-            networkModule->sendData(sentTopic,sizeof(Command) + sizeof(GameDataCommand_t));
-
+            free(sentTopic);
         }
     }
-    delete(pid);
-//    free(sentTopic);
+
     return false;
 }
 
