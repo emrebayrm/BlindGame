@@ -113,14 +113,14 @@ bool BlindGame::isValidMovement(int dir, Point *p) {
     } else if(dir == LEFT) {
         point = new Point(p->getX(), p->getY() - 1);
     } else {
-        free(point);
+        delete point;
         return false;
     }
     if(!isValidPoint(point)) {
-        free(point);
+       delete point;
         return false;
     }
-    free(point);
+    delete point;
     return true;
 }
 
