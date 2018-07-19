@@ -38,7 +38,12 @@ int mqttPublisher::publish(string message) {
     pubmsg.payloadlen = message.size();
     pubmsg.qos = QOS;
     pubmsg.retained = 0;
-    MQTTClient_publishMessage(this->mqttClient, getTopic().c_str(), &pubmsg, &token);
+    again:
+    if(MQTTClient_publishMessage(this->mqttClient, getTopic().c_str(), &pubmsg, &token) != MQTTCLIENT_SUCCESS)
+    {
+        init();
+        goto again;
+    }
     rc = MQTTClient_waitForCompletion(this->mqttClient, token, TIMEOUT);
 
     return rc;
@@ -82,6 +87,8 @@ int mqttSubscriber::receive(void *message) {
     do {
         if ((rc = MQTTClient_receive(this->mqttClient, &topic, &lenTopic, &_message, TIMEOUT)) != MQTTCLIENT_SUCCESS) {
             perror("Failed ");
+            init();
+            continue;
             //exit(-1);
         }
 
