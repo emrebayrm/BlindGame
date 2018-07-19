@@ -112,10 +112,15 @@ bool BlindGame::isValidMovement(int dir, Point *p) {
         point = new Point(p->getX() - 1, p->getY());
     } else if(dir == LEFT) {
         point = new Point(p->getX(), p->getY() - 1);
-    } else
+    } else {
+        free(point);
         return false;
-    if(!isValidPoint(point))
+    }
+    if(!isValidPoint(point)) {
+        free(point);
         return false;
+    }
+    free(point);
     return true;
 }
 
@@ -185,6 +190,8 @@ void BlindGame::startGame() {
 
     distanceSender = new mqttPublisher(distanceTopic,address,pubid);
     positionCollecter = new mqttSubscriber(positionTopic,address,subid);
+    distanceSender->init();
+    positionCollecter->init();
     placePlayers();
     placeCoin();
 }

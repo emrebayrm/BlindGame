@@ -5,6 +5,7 @@
 #include "blindGameServerEngine.hpp"
 #include "packets.hpp"
 #include "dummies/DummyGame.h"
+#include <vector>
 
 Command * BlindGameServerEngine::doHandshake() {
     Command *command = static_cast<Command *>(malloc(sizeof(Command)));
@@ -41,9 +42,42 @@ Game *BlindGameServerEngine::createGame(GameCreateCommand_t createPacket, GameJo
 void *gameRunner(void *arg){
     BlindGame *game;
     game = static_cast<BlindGame *>(arg);
-    while(game->isFinished()){
-
+    int winner -1;
+    while((winner = game->isFinished()) == -1){
+        vector<pair<int,int>> dists = game->getCoinDistances();
+        sendGameInfos(game, dists);
+        while(!game->isTurnFinished()) {
+            char *received;
+            if(game->positionCollecter->receive(playerDir) != 0) {
+                char *playerId = strtok(received, ",");
+                int pId = atoi(playerId);
+                char *dir = strtok(NULL, ",");
+                int pDir = atoi(dir);
+                game->movePlayer(pDir, pId);
+                sendGameInfos(game dists);
+            }
+        }
     }
+}
+
+void sendGameInfos(BlindGame *game, vector<pair<int,int>> dists) {
+    char *distPack = (char*) malloc(game->getCurrPlayers() * 12 * sizeof(char) + 1);
+    for(int i = 0; i < dists.size(); ++i) {
+        pair<int,int> p = dists[i];
+        BlindGamePlayer *player = (BlindGamePlayer*) game->getPlayer(p.first);
+        strcat(distPack,to_string(p.first).c_str());
+        strcat(distPack,",");
+        strcat(distPack, to_string(player->getCurrMove()).c_str());
+        strcat(distPack,",");
+        strcat(distPack, to_string(player->getLocation()->getX()).c_str());
+        strcat(distPack,",");
+        strcat(distPack, to_string(player->getLocation()->getY()).c_str());
+        strcat(distPack,",");
+        strcat(distPack, to_string(p.second).c_str());
+        strcat(distPack,"-");
+    }
+    strcat(distPack, "");
+    game->distanceSender->publish(distPack);
 }
 
 bool BlindGameServerEngine::startGameIntoThread(Game *game) {
