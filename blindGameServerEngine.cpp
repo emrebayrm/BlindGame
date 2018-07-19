@@ -37,7 +37,7 @@ Game *BlindGameServerEngine::createGame(GameCreateCommand_t createPacket, GameJo
 
     joinPacket.gameId = game->getId();
     joinGame(joinPacket);
-
+    cout << game <<endl;
     startGameIntoThread(game);
 
     return game;
@@ -65,12 +65,17 @@ void sendGameInfos(BlindGame *game, vector<pair<int,int>> dists) {
 
 void *gameRunner(void *arg){
     BlindGame *game;
-    game = static_cast<BlindGame *>(arg);
+    game = (BlindGame*)(arg);
     int winner = -1;
+    cout << game <<endl;
     while((winner = game->isFinished()) == -1){
+        cout << "---" << endl;
         vector<pair<int,int>> dists = game->getCoinDistances();
+        cout << "000" << endl;
         sendGameInfos(game, dists);
+        cout << "111" << endl;
         while(!game->isTurnFinished()) {
+            cout << "222" << endl;
             char *received;
             if(game->positionCollecter->receive(received) != 0) {
                 char *playerId = strtok(received, ",");
@@ -87,7 +92,8 @@ void *gameRunner(void *arg){
 bool BlindGameServerEngine::startGameIntoThread(Game *game) {
     GameServerEngine::startGameIntoThread(game);
     pthread_t id;
-    //pthread_create(&id,NULL,gameRunner,game);
+    cout << game->isFinished() <<  "sadsa" <<endl;
+    pthread_create(&id,NULL,gameRunner,game);
     return true;
 }
 

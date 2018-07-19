@@ -11,6 +11,14 @@
 
 using  namespace std;
 
+int calculateMapRow(int maxPlayer) {
+        return 11 + (maxPlayer - 2) * 2;
+    }
+    
+    int calculateMapCol(int maxPlayer) {
+        return 11 + (maxPlayer - 2) * 2;
+    }
+
 int main(int argc, char *argv[]){
     ClientNetworkModule networkModule;
     Command *command;
@@ -35,46 +43,36 @@ int main(int argc, char *argv[]){
     
     
     int commandChoice;
-    cout << "enter command: ";
+    cout << "enter createCommand: ";
     cin >> commandChoice;
-    
-    int calculateMapRow(int maxPlayer) {
-        return 11 + (maxPlayer - 2) * 2;
-    }
-    
-    int calculateMapCol(int maxPlayer) {
-        return 11 + (maxPlayer - 2) * 2;
-    }
-    Command *command;
+    GameCreateCommand_t *createPacket;
+    GameJoinCommand_t *joinPacket;
+    Command *createCommand;
     switch (commandChoice) {
         case CREATE:
-            GameCreateCommand_t *createPacket;
-            GameJoinCommand_t *joinPacket;
-            command = static_cast<Command *>(malloc(sizeof(Command) + sizeof(GameJoinCommand_t) + sizeof(GameCreateCommand_t)));
-            command->commandType = CREATE;
-            command->length =sizeof(GameCreateCommand_t) + sizeof(GameJoinCommand_t);
-            cout << "...." << command->length << endl;
-            createPacket = reinterpret_cast<GameCreateCommand_t *>(command->context);
-            joinPacket = reinterpret_cast<GameJoinCommand_t *>(command->context + sizeof(GameCreateCommand_t));
-            string name;
+            createCommand = static_cast<Command *>(malloc(sizeof(Command) + sizeof(GameJoinCommand_t) + sizeof(GameCreateCommand_t)));
+            createCommand->commandType = CREATE;
+            createCommand->length =sizeof(GameCreateCommand_t) + sizeof(GameJoinCommand_t);
+            cout << "...." << createCommand->length << endl;
+            createPacket = reinterpret_cast<GameCreateCommand_t *>(createCommand->context);
+            joinPacket = reinterpret_cast<GameJoinCommand_t *>(createCommand->context + sizeof(GameCreateCommand_t));
             cout << "enter game name: ";
             cin >> createPacket->gameName;
             cout << "enter max player: ";
             cin >> createPacket->maxPlayer;
             cout << "enter player name: ";
             cin >> joinPacket->playerName;
-            networkModule.sendData(command,sizeof(Command) + sizeof(GameCreateCommand_t) + sizeof(GameJoinCommand_t));
+            networkModule.sendData(createCommand,sizeof(Command) + sizeof(GameCreateCommand_t) + sizeof(GameJoinCommand_t));
             break;
         case JOIN:
-            GameJoinCommand_t *joinPacket;
-            command = static_cast<Command *>(malloc(sizeof(Command) + sizeof(GameJoinCommand_t)));
-            command->commandType = JOIN;
-            joinPacket = reinterpret_cast<GameJoinCommand_t *>(createComand->context + sizeof(GameCreateCommand_t));
+            createCommand = static_cast<Command *>(malloc(sizeof(Command) + sizeof(GameJoinCommand_t)));
+            createCommand->commandType = JOIN;
+            joinPacket = reinterpret_cast<GameJoinCommand_t *>(createCommand->context + sizeof(GameCreateCommand_t));
             cout << "enter game id: ";
             cin >> joinPacket->gameId;
             cout << "enter player name: ";
             cin >> joinPacket->playerName;
-            networkModule.sendData(command,sizeof(Command) + sizeof(GameJoinCommand_t));
+            networkModule.sendData(createCommand,sizeof(Command) + sizeof(GameJoinCommand_t));
             break;
         case OBSERVE:
             cout << "(o)))" << endl;
@@ -106,9 +104,11 @@ int main(int argc, char *argv[]){
     mqttPublisher *positionSender = new mqttPublisher(posTopic, "127.0.0.1", sid);
     mqttSubscriber *distanceCollector = new mqttSubscriber(disTopic, "127.0.0.1", pid);
     
-    positionSender.init();
-    distanceCollector.init();
+    positionSender->init();
+    distanceCollector->init();
     
+    int winner = -1;
+
     
     
     return 0;
