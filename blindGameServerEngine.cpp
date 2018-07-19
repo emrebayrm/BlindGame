@@ -5,7 +5,9 @@
 #include "blindGameServerEngine.hpp"
 #include "packets.hpp"
 #include "dummies/DummyGame.h"
+#include "blindGamePlayer.hpp"
 #include <vector>
+#include <cstring>
 
 Command * BlindGameServerEngine::doHandshake() {
     Command *command = static_cast<Command *>(malloc(sizeof(Command)));
@@ -40,26 +42,6 @@ Game *BlindGameServerEngine::createGame(GameCreateCommand_t createPacket, GameJo
 
     return game;
 }
-void *gameRunner(void *arg){
-    BlindGame *game;
-    game = static_cast<BlindGame *>(arg);
-    int winner -1;
-    while((winner = game->isFinished()) == -1){
-        vector<pair<int,int>> dists = game->getCoinDistances();
-        sendGameInfos(game, dists);
-        while(!game->isTurnFinished()) {
-            char *received;
-            if(game->positionCollecter->receive(playerDir) != 0) {
-                char *playerId = strtok(received, ",");
-                int pId = atoi(playerId);
-                char *dir = strtok(NULL, ",");
-                int pDir = atoi(dir);
-                game->movePlayer(pDir, pId);
-                sendGameInfos(game dists);
-            }
-        }
-    }
-}
 
 void sendGameInfos(BlindGame *game, vector<pair<int,int>> dists) {
     char *distPack = (char*) malloc(game->getCurrPlayers() * 12 * sizeof(char) + 1);
@@ -79,6 +61,27 @@ void sendGameInfos(BlindGame *game, vector<pair<int,int>> dists) {
     }
     strcat(distPack, "");
     game->distanceSender->publish(distPack);
+}
+
+void *gameRunner(void *arg){
+    BlindGame *game;
+    game = static_cast<BlindGame *>(arg);
+    int winner = -1;
+    while((winner = game->isFinished()) == -1){
+        vector<pair<int,int>> dists = game->getCoinDistances();
+        sendGameInfos(game, dists);
+        while(!game->isTurnFinished()) {
+            char *received;
+            if(game->positionCollecter->receive(received) != 0) {
+                char *playerId = strtok(received, ",");
+                int pId = atoi(playerId);
+                char *dir = strtok(NULL, ",");
+                int pDir = atoi(dir);
+                game->movePlayer(pDir, pId);
+                sendGameInfos(game, dists);
+            }
+        }
+    }
 }
 
 bool BlindGameServerEngine::startGameIntoThread(Game *game) {
