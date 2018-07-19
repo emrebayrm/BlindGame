@@ -83,11 +83,12 @@ void *gameRunner(void *arg){
     int winner = -1;
     cout << game <<endl;
     game->startGame();
+    vector<pair<int,int>> dists = game->getCoinDistances();
+    usleep(500000);
+    sendGameInfos(game, dists);
     while((winner = game->isFinished()) == -1){
-        vector<pair<int,int>> dists = game->getCoinDistances();
-        usleep(500000);
-        sendGameInfos(game, dists);
-        while(!game->isTurnFinished()) {
+        int x = 3;
+        while(x != 0) {
             char *received;
             received = static_cast<char *>(calloc(sizeof(char), 20));
             if(game->positionCollecter->receive(received) != 0) {
@@ -101,10 +102,11 @@ void *gameRunner(void *arg){
                 dir = strtok(NULL, ",");
                 pDir = atoi(dir);
                 game->movePlayer(pDir, pId);
-//                dists = game->getCoinDistances();
-//                sendGameInfos(game, dists);
+                dists = game->getCoinDistances();
+                sendGameInfos(game, dists);
             }
             free(received);
+            x--;
         }
     }
 }

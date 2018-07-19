@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) {
 
     command = static_cast<Command *>(malloc(sizeof(Command)));
     dataCommand = static_cast<GameDataCommand_t *>(malloc(sizeof(GameDataCommand_t)));
-    char addres[] = "192.168.2.229";
+    char addres[] = "127.0.0.1";
     networkModule.init(1550, addres);
 
     networkModule.recvData(command, sizeof(Command));
@@ -152,27 +152,26 @@ int main(int argc, char *argv[]) {
     string buffer;
     char *receivedPacket;
     int tmppid;
-    int flag;
-    int curMove;
+    volatile int flag = -1;
+    int curMove ;
     int distance;
     receivedPacket = static_cast<char *>(calloc(sizeof(char) , 200));
 
-    while (1) {
+    while (flag == -1) {
         memset(receivedPacket,0,200);
         cout << "-- : " <<  distanceCollector->receive(receivedPacket) << endl;
         //flag,pid,currMove,X,Y,dist-pid,currMove,X,Y,dist-....
-
-        if ((temp = strtok(receivedPacket, ",-")) != NULL)
-            flag = atoi(temp);
         cout << receivedPacket << endl;
+        if ((temp = strtok(receivedPacket, ",")) != NULL)
+            flag = atoi(temp);
         while (temp != NULL) {
-            temp = strtok(NULL, ",-");
+            temp = strtok(NULL, ",");
             tmppid = atoi(temp);
-            temp = strtok(NULL, ",-");
+            temp = strtok(NULL, ",");
             curMove = atoi(temp);
-            temp = strtok(NULL, ",-");
+            temp = strtok(NULL, ",");
             x = atoi(temp);
-            temp = strtok(NULL, ",-");
+            temp = strtok(NULL, ",");
             y = atoi(temp);
             temp = strtok(NULL, ",-");
             distance = atoi(temp);
@@ -181,7 +180,7 @@ int main(int argc, char *argv[]) {
             }
         }
         //printMap(row, col, x, y, distance);
-        while(curMove < 3) {
+//        while(curMove < 3) {
             cout << "X: " << x << "  Y: " << y << "  Dist: " << distance << "   CurrMove: " << curMove << endl;
             int inp;
             cout << "Enter direction 0: Up 1:Right 2:Down 3:Left " << endl;
@@ -191,11 +190,11 @@ int main(int argc, char *argv[]) {
             buffer.append(",");
             buffer.append(to_string(inp));
             positionSender->publish(buffer);
-            curMove++;
-        }
+//            curMove++;
+//        }
     }
 
-
+    cout << "Winner" <<flag << endl;
     return 0;
 
 }
