@@ -34,13 +34,13 @@ int Point::distance(Point *p) {
 
 void Point::go(int dir) {
     if(dir == UP) {
-        incY();
-    } else if(dir == RIGHT) {
-        incX();
-    } else if(dir == DOWN) {
-        decY();
-    } else if(dir == LEFT) {
         decX();
+    } else if(dir == RIGHT) {
+        incY();
+    } else if(dir == DOWN) {
+        incX();
+    } else if(dir == LEFT) {
+        decY();
     }
 }
 

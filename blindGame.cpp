@@ -105,13 +105,13 @@ bool BlindGame::isValidPoint(Point *p) {
 bool BlindGame::isValidMovement(int dir, Point *p) {
     Point *point;
     if(dir == UP) {
-        point = new Point(p->getX(), p->getY() + 1);
-    } else if(dir == RIGHT) {
         point = new Point(p->getX() + 1, p->getY());
+    } else if(dir == RIGHT) {
+        point = new Point(p->getX() , p->getY() + 1);
     } else if(dir == DOWN) {
-        point = new Point(p->getX() , p->getY() - 1);
+        point = new Point(p->getX() - 1 , p->getY());
     } else if(dir == LEFT) {
-        point = new Point(p->getX() -1, p->getY());
+        point = new Point(p->getX() , p->getY() - 1);
     } else {
         delete point;
         return false;

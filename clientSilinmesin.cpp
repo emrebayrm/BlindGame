@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) {
 
     command = static_cast<Command *>(malloc(sizeof(Command)));
     dataCommand = static_cast<GameDataCommand_t *>(malloc(sizeof(GameDataCommand_t)));
-    char addres[] = "192.168.43.98";
+    char *addres = argv[1];
     networkModule.init(1550, addres);
 
     networkModule.recvData(command, sizeof(Command));
@@ -160,11 +160,14 @@ int main(int argc, char *argv[]) {
 
     while (flag == -1) {
         memset(receivedPacket,0,200);
-        cout << "-- : " <<  distanceCollector->receive(receivedPacket) << endl;
+        //cout << "-- : " <<  distanceCollector->receive(receivedPacket) << endl;
+        distanceCollector->receive(receivedPacket);
         //flag,pid,currMove,X,Y,dist-pid,currMove,X,Y,dist-....
         cout << receivedPacket << endl;
         if ((temp = strtok(receivedPacket, ",")) != NULL)
             flag = atoi(temp);
+        if(flag != -1 )
+            break;
         while (temp != NULL) {
             temp = strtok(NULL, ",");
             tmppid = atoi(temp);
@@ -181,7 +184,7 @@ int main(int argc, char *argv[]) {
             }
         }
         curMove = 0;
-        //printMap(row, col, x, y, distance);
+        printMap(row, col, x, y, distance);
         while(curMove < 3) {
             cout << "X: " << x << "  Y: " << y << "  Dist: " << distance << "   CurrMove: " << curMove << endl;
             int inp;
@@ -199,31 +202,47 @@ int main(int argc, char *argv[]) {
             positionSender->publish(buffer);
             curMove++;
         }
+        cout << "Waiting for other player to play "  << endl;
     }
 
-    cout << "Winner" <<flag << endl;
+    cout << "Winner " <<flag << endl;
+
+    if(flag == playerId){
+        cout << "!!! Congrat " << endl;
+    }else
+        cout << "You lost :( ... "  << endl;
     return 0;
 
 }
 
 void printMap(int row, int col, int x, int y, int coinDist) {
+    printf("r:%d c:%d x:%d y:%d dist:%d\n",row,col,x,y,coinDist);
+    printf("  ");
     for (int i = 0; i < col; ++i)
-        cout << "-";
-    cout << endl;
+        printf("%2d ",i);
+    cout << endl << "  ";
+    for (int i = 0; i < col; ++i)
+        printf("---");
+    cout << "--" << endl;
     for (int i = 0; i < col; ++i) {
-        cout << "| ";
+        printf("%2d|",i);
         for (int j = 0; j < row; ++j) {
             if (i == y && j == x) {
-                cout << 'X';
-            } else if ((x - coinDist > i && y - coinDist > j) || (x + coinDist > i && y + coinDist > i))
-                cout << ".";
+                cout << " X ";
+            }else if( (((i - y)*(i - y)) + ((j - x)*(j - x))) <= (coinDist*coinDist) ){
+                cout << "***";
+            }
             else
-                cout << " ";
+                cout << "   ";
         }
         cout << " |" << endl;
     }
+    cout << "  ";
     for (int i = 0; i < col; ++i)
-        cout << "-";
-    cout << endl;
-
+        printf("---");
+    cout << "--" << endl;
+    printf("  ");
+    for (int i = 0; i < col; ++i)
+        printf("%2d ",i);
+    printf("\n");
 }
