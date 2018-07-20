@@ -105,13 +105,13 @@ bool BlindGame::isValidPoint(Point *p) {
 bool BlindGame::isValidMovement(int dir, Point *p) {
     Point *point;
     if(dir == UP) {
-        point = new Point(p->getX() + 1, p->getY());
-    } else if(dir == RIGHT) {
         point = new Point(p->getX(), p->getY() + 1);
+    } else if(dir == RIGHT) {
+        point = new Point(p->getX() + 1, p->getY());
     } else if(dir == DOWN) {
-        point = new Point(p->getX() - 1, p->getY());
+        point = new Point(p->getX() , p->getY() - 1);
     } else if(dir == LEFT) {
-        point = new Point(p->getX(), p->getY() - 1);
+        point = new Point(p->getX() -1, p->getY());
     } else {
         delete point;
         return false;
@@ -133,11 +133,13 @@ vector<int> BlindGame::getCoinDirections() {
 }
 
 void BlindGame::playCoin(int moveC) {
+    int j = 0;
     for(int i = 0; i < moveC; ++i) {
         vector<int> dirs = getCoinDirections();
         if(dirs.size() == 0)
             return;
-        int dir = rand() % dirs.size();
+        int dir;
+        dir = dirs[rand() % dirs.size()];
         moveCoin(dir);
     }
 }
