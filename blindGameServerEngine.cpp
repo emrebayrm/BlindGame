@@ -87,9 +87,10 @@ void *gameRunner(void *arg){
     vector<pair<int,int>> dists = game->getCoinDistances();
     usleep(500000);
     sendGameInfos(game, dists);
+    int receiveCount;
     while((winner = game->isFinished()) == -1){
-
-        while(!game->isTurnFinished()) {
+        receiveCount = game->getMaxPlayer() * 3;
+        while(receiveCount) {
             char *received;
             received = static_cast<char *>(calloc(sizeof(char), 20));
             if(game->positionCollecter->receive(received) != 0) {
@@ -102,14 +103,18 @@ void *gameRunner(void *arg){
                 pId = atoi(playerId);
                 dir = strtok(NULL, ",");
                 pDir = atoi(dir);
+                //game->movePlayer(pDir, pId);
                 if(game->movePlayer(pDir, pId)) {
-                    dists = game->getCoinDistances();
-                    sendGameInfos(game, dists);
+//                    dists = game->getCoinDistances();
+//                    sendGameInfos(game, dists);
                 }
             }
             free(received);
-
+            --receiveCount;
         }
+        dists = game->getCoinDistances();
+        sendGameInfos(game, dists);
+
     }
     cout << "Player : " << winner << " win ! " <<endl;
 

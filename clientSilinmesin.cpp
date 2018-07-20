@@ -180,6 +180,7 @@ int main(int argc, char *argv[]) {
                 break;
             }
         }
+        curMove = 0;
         //printMap(row, col, x, y, distance);
         while(curMove < 3) {
             cout << "X: " << x << "  Y: " << y << "  Dist: " << distance << "   CurrMove: " << curMove << endl;
